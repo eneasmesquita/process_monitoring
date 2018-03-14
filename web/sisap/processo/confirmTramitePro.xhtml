@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <p:confirmDialog header="Confirmação de dados de Tramitação de Processo" message="Confirme os dados da tramitação!" 
+                     severity="alert" widgetVar="confirm_tramite_pro_w" id="confirm_tramite_pro" closable="false" width="700">
+        <h:form id="form_confirm_tramite_pro">
+            <h:panelGrid columns="2">
+                <h:outputLabel value="nº Processo:"/>
+                <h:outputText value="#{TramiteProcessoControlador.numProcesso}" style="font-weight: bold; color: #2779AA"/>
+            </h:panelGrid>
+            <h:panelGrid columns="2" rendered="#{TramiteProcessoControlador.exibeTramiteLegado}">
+
+                <h:outputLabel value="Colaborador Despacho: "/>
+                <h:outputText value="#{TramiteProcessoControlador.tramite_processo_inserir.remetenteTp}" 
+                              style="font-weight: bold; color: #2779AA" rendered="#{!TramiteProcessoControlador.exibePL}"/>
+
+                <h:outputLabel value="Setor Origem: " rendered="#{!TramiteProcessoControlador.exibePL}"/>
+                <h:outputText value="#{TramiteProcessoControlador.tramite_processo_inserir.setorOrigemTp}" 
+                              style="font-weight: bold; color: #2779AA" rendered="#{!TramiteProcessoControlador.exibePL}"/>
+                <h:outputLabel value="Data Despacho: "/>
+                <h:outputText value="#{TramiteProcessoControlador.tramite_processo_inserir.dataEnvioTp}" style="font-weight: bold; color: #2779AA">
+                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                </h:outputText>
+            </h:panelGrid>
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Setor Destino: " rendered="#{!TramiteProcessoControlador.exibePL}"/>
+                <h:outputText value="#{TramiteProcessoControlador.tramite_processo_inserir.setorDestinoTp}" 
+                              style="font-weight: bold; color: #2779AA" rendered="#{!TramiteProcessoControlador.exibePL}"/>
+                <h:outputLabel value="Fase CPL:" rendered="#{TramiteProcessoControlador.exibePL}"/>
+                <h:outputText value="#{TramiteProcessoControlador.faseCPL}" style="font-weight: bold; color: #2779AA" 
+                              rendered="#{TramiteProcessoControlador.exibePL}"/>
+            </h:panelGrid>
+
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Observação"/>
+                <h:outputText value="#{TramiteProcessoControlador.tramite_processo_inserir.observacoesTp}" style="font-weight: bold; color: #2779AA"/>
+            </h:panelGrid>
+            <h:panelGroup layout="block" style="text-align: center;">
+                <p:commandButton icon="ui-icon-check" value="Confirmar" 
+                                 onsuccess="confirm_tramite_pro_w.hide() dlg_atualiza_andamento_processo.hide(); dlg_coloca_processo_tramite.hide();"
+                                 update=":pnl_listAndamentoProcesso :form_list_andamento_processo:dt_andamento_processo :growl_center 
+                                 :ocorrencia_tp :opl_tp :testPanel1 :pnl_tipoProcesso" actionListener="#{TramiteProcessoControlador.tramitarProcesso}"/>  
+                <p:commandButton icon="ui-icon-cancel" value="Cancelar" oncomplete="confirm_tramite_pro_w.hide();" />   
+            </h:panelGroup>
+        </h:form>
+    </p:confirmDialog> 
+
+</html>
+

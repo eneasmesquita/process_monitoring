@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:dialog id="dlog_alt_contrato" header="Alteração de Contrato" widgetVar="dlg_alt_contrato" 
+              closable="false" resizable="false" modal="true">
+        <h:form id="form_alt_contrato">
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Número:"/>
+                <p:inputMask mask="99999/9999" required="true" requiredMessage="Campo [Número] é Obrigatório!" value="#{ContratoControlador.contrato.numContrato}"/>
+                <h:outputLabel value="Assunto:"/>
+                <p:inputTextarea required="true" requiredMessage="Campo [Assunto] é Obrigatório!!" value="#{ContratoControlador.contrato.assuntoContrato}"
+                                 style="width: 400px; text-transform: uppercase"/>
+                <h:outputLabel value="Descrição:"/>
+                <p:inputTextarea required="true" requiredMessage="Campo [Descrição] é Obrigatório!!" value="#{ContratoControlador.contrato.descricaoContrato}"
+                                 style="width: 400px; text-transform: uppercase"/>
+                <h:outputLabel value="Observação:"/>
+                <p:inputTextarea value="#{ContratoControlador.contrato.observacaoContrato}" style="width: 400px; text-transform: uppercase"/>
+                <h:outputLabel value="Data:"/>
+                <p:calendar required="true" requiredMessage="Campo [Data] é Obrigatório!" value="#{ContratoControlador.contrato.dataContrato}" pattern="dd/MM/yyyy" pages="3"/>
+            </h:panelGrid>
+            <h:panelGrid columns="4">
+                <h:outputLabel value="Vigência:"/>
+                <p:calendar showOn="focus" readonlyInput="true" pattern="dd/MM/yyyy" pages="3" required="true" 
+                            requiredMessage="O campo [data inicial é obrigatório!]" locale="pt_BR" value="#{ContratoControlador.contrato.vigenciaDataInicial}"/>
+                <h:outputText value="à"/>
+                <p:calendar showOn="focus" readonlyInput="true" pattern="dd/MM/yyyy" pages="3" required="true" 
+                            requiredMessage="O campo [data final é obrigatório!]" locale="pt_BR" value="#{ContratoControlador.contrato.vigenciaDataFinal}"/>
+            </h:panelGrid>
+            <p:separator style="width: 500px"/>
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Processo Vinculado:"/>
+                <p:autoComplete required="true" requiredMessage=") campo [Processo vinculado] é obrigatório" 
+                                value="#{ContratoControlador.numProcesso}" completeMethod="#{ContratoControlador.completaNumProcesso}"/>
+            </h:panelGrid>
+            <h:outputLabel value="Houve Aditamento do Contrato:"/>
+            <p:selectOneRadio value="#{ContratoControlador.houveAditamento}">
+                    <f:selectItem itemLabel="Não" itemValue="0"/>
+                    <f:selectItem itemLabel="Sim" itemValue="1"/>
+                </p:selectOneRadio>
+            <br/>
+            <center>
+                <h:panelGrid columns="2">
+                    <p:commandButton id="cad_contrato" value="Salvar" icon="ui-icon-plusthick"
+                                     type="submit" oncomplete="dlg_alt_contrato.hide();" actionListener="#{ContratoControlador.alterar}" 
+                                     update=":growl_center :pnl_listContrato_Empresa :pnl_listTipoProcesso"/>
+                    <p:commandButton value="Cancelar" oncomplete="dlg_alt_contrato.hide();" icon="ui-icon-cancel"/>
+                </h:panelGrid>
+            </center>
+        </h:form>
+    </p:dialog>
+</html>
+

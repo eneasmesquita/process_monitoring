@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <p:confirmDialog header="Confirmação de dados de Tramitação de Memorando" message="Confirme o Setor Destino da tramitação!" 
+                     severity="alert" widgetVar="confirm_tramite_memo_w" id="confirm_tramite_memo" closable="false" width="700">
+        <h:form id="form_confirm_tramite_memo">
+            <h:panelGrid columns="2">
+                <h:outputLabel value="nº Memorando:"/>
+                <h:outputText value="#{TramiteMemorandoControlador.numMemorando}" style="font-weight: bold; color: #2779AA"/>
+                <h:outputLabel value="Setor Destino: "/>
+                <h:outputText value="#{TramiteMemorandoControlador.tramite_memorando_inserir.setorDestinoTm}" 
+                              style="font-weight: bold; color: #2779AA"/>
+            </h:panelGrid>
+            
+            <h:panelGrid columns="2" rendered="#{TramiteMemorandoControlador.exibeTramiteLegado}">
+                
+                <h:outputLabel value="Colaborador Despacho: "/>
+                <h:outputText value="#{TramiteMemorandoControlador.tramite_memorando_inserir.remetenteTm}" 
+                              style="font-weight: bold; color: #2779AA"/>
+                
+                <h:outputLabel value="Setor Origem: "/>
+                <h:outputText value="#{TramiteMemorandoControlador.tramite_memorando_inserir.setorOrigemTm}" 
+                              style="font-weight: bold; color: #2779AA"/>
+                <h:outputLabel value="Data Despacho: "/>
+                <h:outputText value="#{TramiteMemorandoControlador.tramite_memorando_inserir.dataEnvioTm}" style="font-weight: bold; color: #2779AA">
+                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                </h:outputText>
+                </h:panelGrid>
+            
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Observação"/>
+                <h:outputText value="#{TramiteMemorandoControlador.tramite_memorando_inserir.observacoesTm}" style="font-weight: bold; color: #2779AA"/>
+            </h:panelGrid>
+            
+            <h:panelGroup layout="block" style="text-align: center;">
+                <p:commandButton  icon="ui-icon-check" value="Confirmar" onsuccess="confirm_tramite_memo_w.hide() dlog_atualiza_andamento_memorando.hide();"  
+                                  update=":pnl_listAndamentoMemorando :form_list_andamento_memorando:dt_andamento_memorando :growl_center 
+                                  :ocorrencia_tm :opl_tm :testPanel" 
+                                  actionListener="#{TramiteMemorandoControlador.tramitarMemorando}"/>  
+                <p:commandButton icon="ui-icon-cancel" value="Cancelar" oncomplete="confirm_tramite_memo_w.hide();" />   
+            </h:panelGroup>
+        </h:form>
+    </p:confirmDialog> 
+
+</html>
+

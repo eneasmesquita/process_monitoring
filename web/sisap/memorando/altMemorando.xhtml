@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:dialog header="Alteração de Memorando" id="dlog_atualiza_memorando" widgetVar="dlg_atualiza_memorando" 
+              modal="true" appendToBody="true" dynamic="true" closable="false">
+        <h:form id="form_atualiza_memorando">          
+            <h:panelGrid columns="2">
+                <h:outputText value="Número do Memorando:"/>
+                <p:inputMask mask="99999/9999" value="#{MemorandoControlador.memorando.numMemorando}" 
+                             required="true" requiredMessage="O campo [Num Memorando] é obrigatório!" readonly="true"/>
+                <h:outputText value="Data Abertura:"/>
+                <p:calendar value="#{MemorandoControlador.memorando.dataMemorando}" required="true" pattern="dd/MM/yyyy" locale="pt_BR"
+                            requiredMessage="O campo [Data Abertura] é obrigatório" readonlyInput="true" pages="3"/>
+                <h:outputLabel value="Setor Cadastrante:"/>
+                
+                <p:selectOneMenu value="#{MemorandoControlador.memorando.setorCadastrante}" required="true" 
+                                 requiredMessage="O campo [Setor Cadastrante] é obrigatório">
+                    <f:selectItem itemLabel="SELECIONE SETOR ORIGEM" itemValue=""/>
+                    <f:selectItems value="#{UsuProControlador.usuariosSetor}" var="setor" itemLabel="#{setor}" itemValue="#{setor}"/>
+                </p:selectOneMenu>
+                
+                <h:outputLabel value="Assunto:"/>
+                <p:inputTextarea required="true" requiredMessage="Campo [Assunto] é Obrigatório!!" value="#{MemorandoControlador.memorando.assuntoMemorando}" 
+                                 style="width: 400px; text-transform: uppercase"/>
+                <h:outputLabel value="Descrição:"/>
+                <p:inputTextarea required="true" requiredMessage="Campo [Descrição] é Obrigatório!" value="#{MemorandoControlador.memorando.descricaoMemorando}" 
+                                 style="width: 400px; text-transform: uppercase"/>
+                <h:outputLabel value="Observações Gerais:"/>
+                <p:inputTextarea required="true" requiredMessage="Campo [Observações Gerais] é Obrigatório!" value="#{MemorandoControlador.memorando.observacaoMemorando}" 
+                                 style="width: 400px; text-transform: uppercase"/>
+            </h:panelGrid>
+            <h:panelGrid columns="5">
+                <h:outputLabel value="Categoria: " />
+                <p:selectOneMenu value="#{MemorandoControlador.memorando.categoriaMemorando}" id="categoria">
+                    <f:selectItem itemLabel="SELECIONE CATEGORIA" itemValue=""/>
+                    <f:selectItem itemLabel="COMPRA" itemValue="COMPRA"/>
+                    <f:selectItem itemLabel="SERVIÇO" itemValue="SERVIÇO"/>
+                    <f:selectItem itemLabel="DIÁRIA" itemValue="DIÁRIA"/>
+                </p:selectOneMenu>
+                <h:outputText value="OUTRO: "/>
+                <p:selectBooleanCheckbox value="#{MemorandoControlador.outro}">
+                    <p:ajax update="outroTipo" listener="#{MemorandoControlador.zeraCategoria()}" immediate="true"/>
+                    <p:ajax update="categoria" listener="#{MemorandoControlador.zeraCategoria()}"/>
+                </p:selectBooleanCheckbox>
+                <p:inputText id="outroTipo" value="#{MemorandoControlador.outroTipoMemorandoEdit}" style="text-transform: uppercase; width: 250px"/>
+            </h:panelGrid>
+
+            <br/>
+            <center>
+                <h:panelGrid columns="2">
+                    <p:commandButton id="atualiza_memorando" value="Salvar" icon="ui-icon-plusthick"
+                                     type="submit" oncomplete="dlg_atualiza_memorando.hide();" actionListener="#{MemorandoControlador.atualizar}" 
+                                     update=":growl_center :pnl_listMemorando"/>
+                    <p:commandButton value="Cancelar" icon="ui-icon-cancel" onsuccess="dlg_atualiza_memorando.hide();"/>
+                </h:panelGrid>
+            </center>
+        </h:form>
+    </p:dialog>
+</html>
+

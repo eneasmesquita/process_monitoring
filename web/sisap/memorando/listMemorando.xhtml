@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <p:panel id="pnl_listMemorando" rendered="#{controladorInterface.listMemorando}">
+
+        <h:form>
+            <p:dataTable value="#{MemorandoControlador.memorandos}" var="memorando" 
+                         paginator="true" rows="10"  
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}
+                         {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                         rowsPerPageTemplate="10,15,20"
+                         emptyMessage="Nenhum registro encontrado."
+                         id="dt_tabela_memorando" 
+                         paginatorAlwaysVisible="true"
+                         paginatorPosition="bottom" style="text-align: center"
+                         rowIndexVar="idx"
+                         rowStyleClass="#{empty idx or idx mod 2 ne 0 ? 'even-row' : 'odd-row'}">
+                <f:facet name="header">
+                    <h:outputText value="Listagem de Memorandos"/>
+                </f:facet>
+                <p:column>
+                    #{idx+1}
+                </p:column>
+                <p:column headerText="Memorando" sortBy="#{memorando.numMemorando}" filterBy="#{memorando.numMemorando}" 
+                          filterMatchMode="contains">
+                    #{memorando.numMemorando}
+                </p:column>
+                <p:column headerText="Setor Cadastro">
+                    #{memorando.setorCadastrante}
+                </p:column>
+                <p:column headerText="Data Abertura" sortBy="#{memorando.dataMemorando}" filterBy="#{memorando.dataMemorando}" 
+                          filterMatchMode="contains">
+                    <h:outputText value="#{memorando.dataMemorando}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Assunto">
+                    #{memorando.assuntoMemorando}
+                </p:column>
+                <p:column headerText="Categoria" sortBy="#{memorando.categoriaMemorando}" filterBy="#{memorando.categoriaMemorando}" 
+                          filterMatchMode="startsWith">
+                    #{memorando.categoriaMemorando}
+                </p:column>
+                <p:column headerText="Visualizar">
+                    <p:commandButton  icon="ui-icon-search" actionListener="#{controladorInterface.exibelistAndamentoMemorando}"
+                                      update=":pnl_center"
+                                      style="background: top; border-style: hidden"
+                                      title="Visualizar Andamento do Memorando">
+                        <f:setPropertyActionListener value="#{memorando.codMemorando}" target="#{TramiteMemorandoControlador.codMemorando}"/>
+                        <f:setPropertyActionListener value="#{memorando.numMemorando}" target="#{TramiteMemorandoControlador.numMemorando}"/>
+                        <f:setPropertyActionListener value="#{memorando.setorCadastrante}" target="#{TramiteMemorandoControlador.setorCadastrante}"/>
+                        <f:setPropertyActionListener value="#{memorando}" target="#{MemorandoControlador.memorando}"/>
+                    </p:commandButton>
+                </p:column>
+                <p:column headerText="Alterar" rendered="#{sessionScope.setor eq codMemorando.setorCadastrante or sessionScope.privilegio eq 'ADMINISTRADOR'}">
+                    <p:commandButton icon="ui-icon-pencil" onclick="dlg_atualiza_memorando.show();" update=":form_atualiza_memorando"
+                                     style="background: top; border-style: hidden">
+                        <f:setPropertyActionListener value="#{memorando}" target="#{MemorandoControlador.memorando}"/>
+                    </p:commandButton>
+                </p:column>
+                <p:column headerText="Excluir" 
+                          rendered="#{sessionScope.setor eq codMemorando.setorCadastrante or sessionScope.privilegio eq 'ADMINISTRADOR'}">
+                    <p:commandButton icon="ui-icon-trash" style="background: top; border-style: hidden" 
+                                     onclick="conf_del_memorando_w.show();" update=":form_del_memorando">
+                        <f:setPropertyActionListener value="#{memorando}" target="#{MemorandoControlador.memorando}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+
+        </h:form>
+    </p:panel>
+    
+    <ui:include id="inc_dlog_alt_memorando" src="/sisap/memorando/altMemorando.xhtml"/>
+    
+</html>
+

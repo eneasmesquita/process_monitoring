@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <!-- <h:panelGroup layout="block" id="pnlg_conf_re"> -->
+
+    <p:confirmDialog message="Confirme o recebimento do Processo"   
+                     header="Confirmação de recebimento de Processo" 
+                     severity="alert" widgetVar="confirm_recebimento_pro_w" id="confirm_recebimento_pro" closable="false">
+        <h:form id="form_confirm_recebimento_pro">
+
+            <h:outputLabel value="nº Processo:"/>
+            <h:outputText value="#{TramiteProcessoControlador.numProcesso}" style="font-weight: bold; color: #2779AA"/>
+            <br/>
+            <h:panelGrid columns="2" rendered="#{sessionScope.privilegio eq 'ADMINISTRADOR' or sessionScope.privilegio eq 'USUÁRIO DPPA'}">
+                <h:outputLabel value="Trâmite de Processo Legado: "/>
+                <p:selectBooleanCheckbox value="#{TramiteProcessoControlador.tramiteLegado}">
+                    <p:ajax listener="#{TramiteProcessoControlador.verificaTramiteLegadoRecebe()}" update="@form"/>
+                </p:selectBooleanCheckbox>
+            </h:panelGrid>
+            <h:panelGrid columns="2" rendered="#{TramiteProcessoControlador.exibeTramiteLegadoRecebe}">
+                <h:outputLabel value="Colaborador Recebimento: "/>
+                <p:selectOneMenu required="true" requiredMessage="O campo [Usuário] é obrigatório" 
+                                 value="#{TramiteProcessoControlador.tramite_processo_inserir.colaboradorRecebeuTp}">
+                    <f:selectItem itemLabel="SELECIONE NOME" itemValue=""/>
+                    <f:selectItems value="#{UsuProControlador.usuarioNome}" var="usu" itemLabel="#{usu}" itemValue="#{usu}"/>
+                    <p:ajax listener="#{UsuProControlador.insereUsuarioLogin()}"/>
+                </p:selectOneMenu>
+                <h:outputLabel value="Data Recebimento: "/>
+                <p:calendar value="#{TramiteProcessoControlador.tramite_processo_inserir.dataRecebimentoTp}" pattern="dd/MM/yyyy" 
+                            locale="pt_BR" readonlyInput="true" pages="3" rendered="#{TramiteProcessoControlador.exibeTramiteLegadoRecebe}"/>
+            </h:panelGrid>
+
+            <h:panelGroup layout="block" style="text-align: center;">
+                <p:commandButton icon="ui-icon-check" value="Confirmar" oncomplete="confirm_recebimento_pro_w.hide();"  
+                                 actionListener="#{TramiteProcessoControlador.receberProcesso}" 
+                                 update=":form_list_andamento_processo :growl_center :ocorrencia_tp :opl_tp :testPanel1"/>  
+                <p:commandButton icon="ui-icon-cancel" value="Cancelar" oncomplete="confirm_recebimento_pro_w.hide();" />   
+            </h:panelGroup>
+        </h:form>
+    </p:confirmDialog> 
+</html>
+

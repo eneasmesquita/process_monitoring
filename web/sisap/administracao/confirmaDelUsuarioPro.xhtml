@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="form_del_pro_usuario">
+
+        <p:confirmDialog id="conf_del_pro_usuario" widgetVar="conf_del_pro_usuario_w" 
+                         message="Você realmente deseja excluir a concessão de visualização?" severity="alert"
+                         header="Exclusão de Concessão de Visualização do Processo: #{UsuProControlador.numProcesso} para o usuário: #{UsuProControlador.usuario_processo.username}" 
+                         height="50" width="450" closable="false">
+            <h:panelGroup layout="block" style="text-align: center;">
+                <p:commandButton value="Sim"  onsuccess="conf_del_pro_usuario_w.hide();"  
+                                 actionListener="#{UsuProControlador.excluir}" 
+                                 update=":form_list_pro_sigilosos:dt_tabela_pro_sigiloso :growl_center :pnl_listTipoProcesso 
+                                 :form_tipos_pro:dt_tabela_processo_compra :form_tipos_pro:dt_tabela_processo_diaria :form_tipos_pro:dt_tabela_processo_servico :form_tipos_pro:dt_tabela_processo_outro"/>  
+                <p:commandButton value="Não" oncomplete="conf_del_pro_usuario_w.hide();" /> 
+            </h:panelGroup>
+        </p:confirmDialog>
+
+    </h:form>
+
+</html>
+

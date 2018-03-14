@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="form_del_empresa">
+
+        <p:confirmDialog id="conf_del_empresa" widgetVar="conf_del_empresa_w" 
+                         message="Você realmente deseja excluir a empresa selecionada?" severity="alert"
+                         header="Exclusão da Empresa: " 
+                         height="50" width="450" closable="false">
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Empresa: "/>
+                <h:outputText value="#{EmpresaControlador.empresa.fantasia}" style="color: #2779AA; font-weight: bold"/>
+            </h:panelGrid>
+            <h:panelGroup layout="block" style="text-align: center;">
+                <p:commandButton value="Sim"  onsuccess="conf_del_empresa_w.hide();"  
+                                 actionListener="#{EmpresaControlador.excluir}" 
+                                 update=":form_dt_contrato_empresa:dt_tabela_contrato_empresa :growl_center"/>  
+                <p:commandButton value="Não" oncomplete="conf_del_empresa_w.hide();" /> 
+            </h:panelGroup>
+        </p:confirmDialog>
+
+    </h:form>
+
+</html>
+

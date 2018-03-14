@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:panel id="pnl_listContrato_Empresa" rendered="#{controladorInterface.listContratoEmpresa}">
+        <h:form id="form_dt_contrato_empresa">
+            <p:dataTable value="#{ContratoControlador.contratos}" var="contrato"
+                         paginator="true" rows="10"  rowIndexVar="idx"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}
+                         {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                         rowsPerPageTemplate="10,15,20"
+                         emptyMessage="Nenhum registro encontrado."
+                         id="dt_tabela_contrato_empresa" 
+                         paginatorAlwaysVisible="true"
+                         paginatorPosition="bottom" style="text-align: center"
+                         rowStyleClass="#{empty idx or idx mod 2 ne 0 ? 'even-row' : 'odd-row'}">
+                <f:facet name="header">
+                    Listagem de Contratos possuindo Empresas e Processos Vinculados
+                </f:facet>
+                <p:column style="width:16px">  
+                    <p:rowToggler />  
+                </p:column>
+                <p:column headerText="Data Cad. Contrato">
+                    <h:outputText value="#{contrato.dataCadContrato}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Contrato" sortBy="#{contrato.numContrato}" filterBy="#{contrato.numContrato}" filterMatchMode="contains">
+                    #{contrato.numContrato}
+                </p:column>
+                <p:column headerText="Assunto">
+                    #{contrato.assuntoContrato}
+                </p:column>
+                <p:column headerText="Descrição">
+                    #{contrato.descricaoContrato}
+                </p:column>
+                <p:column headerText="Data" sortBy="#{contrato.dataContrato}" filterBy="#{contrato.dataContrato}" 
+                          filterMatchMode="contains">
+                    <h:outputText value="#{contrato.dataContrato}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Vigência" >
+                    <h:outputText value="#{contrato.vigenciaDataInicial}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                    <h:outputLabel value=" "/>
+                    <h:outputText value="#{contrato.vigenciaDataFinal}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Aditamento" >
+                    <h:outputText value="------" rendered="#{contrato.aditamento eq 'NÃO'}"/>
+                    <h:graphicImage name="check.png" library="images" rendered="#{contrato.aditamento eq 'SIM'}" style="height: 25px; width: 25px"/>
+                </p:column>
+                <p:column headerText="Qtd Aditamento" >
+                    <h:outputText value="---" rendered="#{contrato.numVzsAditamento eq 0}"/>
+                    <h:outputText value="#{contrato.numVzsAditamento}" rendered="#{contrato.numVzsAditamento ne 0}"/>
+                </p:column>
+                <p:column headerText="Alterar" 
+                          rendered="#{sessionScope.setor_id eq '13' or sessionScope.privilegio eq 'ADMINISTRADOR'}">
+                    <p:commandButton icon="ui-icon-pencil"
+                                     style="background: top; border-style: hidden"
+                                     onclick="dlg_alt_contrato.show();" update=":form_alt_contrato">
+                        <f:setPropertyActionListener value="#{contrato}" target="#{ContratoControlador.contrato}"/>
+                        <f:setPropertyActionListener value="#{contrato.codProcesso.numProcesso}" target="#{ContratoControlador.numProcesso}"/>
+                        <f:setPropertyActionListener value="#{contrato.codProcesso.codProcesso}" target="#{ContratoControlador.codProcesso}"/>
+                    </p:commandButton>
+                </p:column>
+
+                <p:rowExpansion>
+                    <p:panelGrid rendered="#{empty contrato.empresaCollection}">
+                        <f:facet name="header">
+                            <p:row>
+                                <p:column style="width: 413px">
+                                    Empresas
+                                </p:column>
+                            </p:row>
+                        </f:facet>
+                        <p:row>
+                            <p:column>
+                                <h:outputLabel value="Nenhum Registro Encontrado." style="color: #f97e7e"/>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    
+                    <p:dataTable rendered="#{not empty contrato.empresaCollection}"
+                                 value="#{contrato.empresaCollection}" var="empresa" rows="5" paginator="false"
+                                 paginatorPosition="bottom" paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink} {RowsPerPageDropdown}"
+                                 paginatorAlwaysVisible="false" rowIndexVar="index" emptyMessage="Nenhuma Empresa encontrada.">
+                        <f:facet name="header">
+                            Empresas
+                        </f:facet>
+                        <p:column>
+                            #{index+1} 
+                        </p:column>
+                        <p:column headerText="CNPJ">
+                            #{empresa.cnpj} 
+                        </p:column>
+                        <p:column headerText="Razão">
+                            #{empresa.razao} 
+                        </p:column>
+                        <p:column headerText="Fantasia">
+                            #{empresa.fantasia} 
+                        </p:column>
+                        <p:column headerText="Responsável">
+                            #{empresa.responsavel} 
+                        </p:column>
+                        <p:column headerText="Contato">
+                            #{empresa.contato} 
+                        </p:column>
+                        <p:column headerText="Endereço">
+                            #{empresa.endereco}
+                        </p:column>
+                        <p:column headerText="Alterar" rendered="#{sessionScope.setor_id eq '13' or sessionScope.privilegio eq 'ADMINISTRADOR'}">
+                            <p:commandButton icon="ui-icon-pencil" style="background: top; border-style: hidden"
+                                             update=":form_alt_empresa"
+                                             oncomplete="dlg_alt_empresa.show();" actionListener="#{EmpresaControlador.limparExibicao}">
+                                <f:setPropertyActionListener value="#{empresa}" target="#{EmpresaControlador.empresa}"/>
+                                <f:setPropertyActionListener value="#{empresa.codContrato.numContrato}" target="#{EmpresaControlador.numContrato}"/>
+                            </p:commandButton>
+                        </p:column>
+                        <p:column headerText="Excluir" 
+                                  rendered="#{sessionScope.setor_id eq '13' or sessionScope.privilegio eq 'ADMINISTRADOR'}">
+                            <p:commandButton icon="ui-icon-trash" style="background: top; border-style: hidden" oncomplete="conf_del_empresa_w.show();" 
+                                             update=":form_del_empresa">
+                                <f:setPropertyActionListener value="#{empresa}" target="#{EmpresaControlador.empresa}"/>
+                                <f:setPropertyActionListener value="#{empresa.codContrato.numContrato}" target="#{EmpresaControlador.numContrato}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </p:rowExpansion>
+
+            </p:dataTable>
+
+        </h:form>
+    </p:panel>
+</html>
+

@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="form_confirm_indefere">
+        <p:confirmDialog message="Confirme o atendimento da solicitação do Processo: #{SolicitacaoProcessoControlador.numProcesso}"   
+                         header="Confirmação de Indeferimento de Solicitação de Processo" 
+                         severity="alert" widgetVar="confirm_indefere_solicitacao_w" id="confirm_indefere_solicitacao" closable="false">
+            <h:panelGrid columns="2">
+                <h:outputText value="Motivo do Indeferimento:" style="vertical-align: central"/>
+                <p:inputTextarea value="#{SolicitacaoProcessoControlador.solicitacao_processo.motivoIndeferimento}"
+                                 style="text-transform: uppercase; width: 350px"
+                                 required="true" requiredMessage="O campo [Motivo do Indeferimento] é obrigatório"/>
+            </h:panelGrid>
+            <h:panelGroup layout="block" style="text-align: center;">
+
+                <p:commandButton icon="ui-icon-check" value="Confirmar" onsuccess="confirm_indefere_solicitacao_w.hide();"  
+                                 actionListener="#{SolicitacaoProcessoControlador.indeferirSolicitacaoProcesso}" 
+                                 update=":pnl_listSolicitacaoProcesso :growl_center :ocorrencia_sp :opl_sp"/>  
+                <p:commandButton icon="ui-icon-cancel" value="Cancelar" oncomplete="confirm_indefere_solicitacao_w.hide();" />   
+            </h:panelGroup>
+        </p:confirmDialog> 
+    </h:form>
+</html>
+

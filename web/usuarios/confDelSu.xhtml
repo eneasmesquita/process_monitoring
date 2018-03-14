@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+
+    <p:dialog id="conf_del_su" widgetVar="conf_del_su_w" modal="true"
+              header="Exclusão de Usuário" resizable="false"
+                     height="100" width="450" closable="false">
+        <h:form id="frm_conf_del_su">
+            <h:panelGrid columns="2">
+                <p:commandButton icon="ui-icon-alert" style="background: top; border-style: hidden"/>
+            <h:outputLabel value="Deseja realmente excluir o usuário: #{SuControlador.su.loginSu}?"/>
+            </h:panelGrid>
+            <br/>
+            <p:separator/>
+            <h:panelGroup layout="block" style="text-align: center;">
+                <p:commandButton value="Sim"  onsuccess="conf_del_su_w.hide();"  
+                                 actionListener="#{SuControlador.excluir}" 
+                                 update="@form :frm_list_su :growl_center"/>  
+                <p:commandButton value="Não" oncomplete="conf_del_su_w.hide();" /> 
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+</html>
+

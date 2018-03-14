@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>SISACOMPO</title>
+        <style type="text/css">
+            body {font-size: 12px;}
+        </style>
+        <link rel="shortcut icon" href="#{facesContext.externalContext.request.contextPath}/resources/images/favicon.ico" type="image/x-icon" /> 
+    </h:head>
+
+    <h:body>
+        <p:layout fullPage="true">
+
+            <p:layoutUnit position="north">
+                <center>
+                    <h:panelGrid columns="3">
+                        <h:graphicImage name="logo.png" library="images" height="100" width="115"/> 
+                        <h:outputText value="__" style="color: #fff"/>
+                        <strong style="color:#002373; font-size: 19px; font-family:  'Trebuchet MS', Arial, Serif;"> Sistema de Acompanhamento de Processos Administrativos - SIAP</strong>
+                    </h:panelGrid>
+                </center>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center" >
+
+                <p:dialog id="dlog_login" widgetVar="dlg_login" closable="false" style="width: 450px;" 
+                          resizable="false" showEffect="scale" visible="true"
+                          header="Sistema de Acompanhamento de Processos Administrativos" draggable="false">
+                    <h:form>
+                        <center>
+                            <h:panelGrid columns="2" >
+                                <h:outputLabel value="Login: " style="font-weight: bold; color: #2779AA"/>
+                                <p:inputText label="Login" required="true" value="#{loginBean.usuario.login}" requiredMessage="O Campo Login é obrigatório!"/>
+                                <h:outputLabel value="Senha: " style="font-weight: bold; color: #2779AA"/>
+                                <p:password required="true" value="#{loginBean.usuario.senha}" requiredMessage="O Campo Senha é obrigatório!"/>
+                            </h:panelGrid>
+                        </center>
+                        <br/>
+                        <center>
+                            <p:commandButton value="Entrar" action="#{loginBean.logon}" icon="ui-icon-unlocked" update="p_msg_login"/>
+                            <br/>
+                            <br/>
+                        </center>
+
+                        <p:messages id="p_msg_login" showDetail="true"/>
+                    </h:form>
+                </p:dialog>
+
+            </p:layoutUnit>
+
+            <p:layoutUnit position="south" style="text-align: center">
+                <label style="color:#002373">Nome da Companhia</label><br/>
+                <label style="color:#002373">Endereço da Companhia</label><br/>
+                <b style="color:#002373">Gerência de Tecnologia da Informação - contato</b>
+            </p:layoutUnit>
+
+        </p:layout>
+    </h:body>
+
+</html>
+

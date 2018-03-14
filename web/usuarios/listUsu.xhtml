@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <!-- TELA RESPONSÁVEL POR ADMINISTRAR(listar, deletar, definir privilégios, controle de acesso, etc...)
+    USUÁRIOS DO SISTEMA  -->
+
+    <p:dialog id="dlg_list_usu" widgetVar="dlog_lst_usu_w" height="500" width="840" modal="true" resizable="false">
+
+        <h:panelGrid columns="3">
+            <h:column>
+                <p:panel style="height: 490px; width: 420px">
+                    <h:form id="frm_limpa_param_busca">
+                        <h:panelGrid columns="3">
+                            <h:outputLabel value="Login: "/>
+                            <p:autoComplete value="#{SuControlador.param_busca}" completeMethod="#{SuControlador.completaLoginUsuario}">
+                                <p:ajax listener="#{SuControlador.exibeDadosUsuario}" update=":frm_usu_selected" event="itemSelect"/>
+                            </p:autoComplete>
+                            <p:commandButton icon="ui-icon-arrowreturnthick-1-s" actionListener="#{SuControlador.limpaParamBusca}" 
+                                             update="@form :frm_usu_selected :frm_usu_selected:plg_data_su"/>
+                        </h:panelGrid>
+                    </h:form>
+                    <br/>
+                    <br/>
+                    <h:form id="frm_usu_selected">
+                        <h:panelGrid columns="2" id="plg_data_su" style="border: 1px solid #ACBECE; border-radius: 4px; width: 360px" rendered="#{not empty SuControlador.param_busca}">
+                            <h:outputLabel value="Login: " style="font-weight: bold; color: #2779AA"/>
+                            <h:outputText value="#{SuControlador.su.loginSu}"/>
+                            <h:outputLabel value="Matrícula: " style="font-weight: bold; color: #2779AA"/>
+                            <h:outputText value="#{SuControlador.su.matricula}"/>
+                            <h:outputLabel value="Nome: " style="font-weight: bold; color: #2779AA"/>
+                            <h:outputText value="#{SuControlador.su.nomeCompletoSu}"/>
+                            <h:outputLabel value="Setor: " style="font-weight: bold; color: #2779AA"/>
+                            <h:outputText value="#{SuControlador.usuario.setorNome}"/>
+                            <h:outputLabel value="Privilégio: " style="font-weight: bold; color: #2779AA"/>
+                            <p:selectOneRadio layout="pageDirection" value="#{SuControlador.su.privilegio}" required="true" 
+                                              requiredMessage="O campo [Privilégio] é obrigatório." >
+                                <f:selectItem itemLabel="Administrador" itemValue="ADMINISTRADOR"/>
+                                <f:selectItem itemLabel="Usuário CPL" itemValue="USUÁRIO CPL"/>
+                                <f:selectItem itemLabel="Usuário DPPA" itemValue="USUÁRIO DPPA"/>
+                            </p:selectOneRadio>
+                        </h:panelGrid>
+                        <br/>
+                        <center>
+                            <p:commandButton value="Cadastrar" actionListener="#{SuControlador.inserirUsuarios}" 
+                                             update="@form :frm_limpa_param_busca :frm_list_su :growl_center"
+                                             rendered="#{not empty SuControlador.param_busca}"/>
+                        </center>
+                    </h:form>
+                </p:panel>
+            </h:column>
+            <h:column>
+                <p:panel style="height: 490px; width: 380px">
+                    <h:form id="frm_list_su">
+                        <p:dataTable emptyMessage="Nenhum superusuário encontrado" value="#{SuControlador.su_listagem}" var="su" id="dt_listagem_su"
+                                     rows="6" paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom">
+                            <f:facet name="header">
+                                <h:outputLabel value="Superusuários do Sistema" style="font-style: italic"/>
+                            </f:facet>
+                            <p:column style="text-align: center">
+                                #{su.loginSu}
+                            </p:column>
+                            <p:column style="text-align: center">
+                                #{su.privilegio}
+                            </p:column>
+                            <p:column style="text-align: center; width: 16px">
+                                <p:commandButton rendered="#{su.loginSu eq 'eneas'}" icon="ui-icon-gear" style="background: top; border-style: hidden"/>
+                                <p:commandButton rendered="#{su.loginSu ne 'eneas'}" icon="ui-icon-trash" 
+                                                 style="background: top; border-style: hidden" onclick="conf_del_su_w.show();" update=":frm_conf_del_su">
+                                    <f:setPropertyActionListener value="#{su}" target="#{SuControlador.su}"/>
+                                </p:commandButton> 
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </p:panel>
+            </h:column>
+        </h:panelGrid>
+
+    </p:dialog>
+</html>
+

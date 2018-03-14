@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:dialog id="dlog_solicitacao_processo" widgetVar="dlg_form_solicitacao_processo" 
+              header="Formulário de Solicitação de Processo" modal="true">
+        <h:form id="form_solicitacao_processo">
+            <h:panelGrid columns="2">
+                <h:outputLabel value="N° do Processo:"/>
+                <h:outputText value="#{SolicitacaoProcessoControlador.numProcesso}" style="color: #2779AA"/>
+                <h:outputLabel value="Setor Alvo da Solicitação:"/>
+                <p:selectOneMenu value="#{SolicitacaoProcessoControlador.setorAlvoSolicitacao}" required="true" 
+                                 requiredMessage="O campo [Setor Solicitante] é obrigatório" id="som_sol_pro" disabled="true">
+                    <f:selectItem itemLabel="SELECIONE ALVO SOLICITAÇÃO" itemValue=""/>
+                    <f:selectItems value="#{UsuProControlador.usuariosSetor}" var="usu" itemLabel="#{usu}" itemValue="#{usu}"/>
+                    <p:ajax listener="#{SolicitacaoProcessoControlador.insereSetorId()}"/>
+                </p:selectOneMenu>
+                <h:outputLabel value="Motivo Solicitação:"/>
+                <p:inputTextarea value="#{SolicitacaoProcessoControlador.solicitacao_processo.motivoSolicitacao}" 
+                                 style="text-transform: uppercase; width: 400px" required="true" requiredMessage="O Campo [Motivo Solicitação] é obrigatório!!"/>
+            </h:panelGrid>
+            <br/>
+            <center>
+                <h:panelGrid columns="2">
+                    <p:commandButton value="Salvar" icon="ui-icon-plusthick" actionListener="#{SolicitacaoProcessoControlador.inserir}"
+                                     oncomplete="dlg_form_solicitacao_processo.hide();" 
+                                     update=":growl_center :ocorrencia_sp :opl_sp :testPanel2">
+                    </p:commandButton>
+                    <p:commandButton value="Limpar" type="reset" icon="ui-icon-cancel"/>
+                </h:panelGrid>
+            </center>
+        </h:form>
+    </p:dialog>
+</html>
+

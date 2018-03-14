@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:dialog id="dlog_cad_anexo_memo" header="Anexar Documento(s) a um Memorando" widgetVar="dlg_cad_anexo_memo" 
+              width="700" closable="true" modal="true">
+        <h:form id="form_cad_anexo_memo" enctype="multipart/form-data">
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Memorando Vinculado:"/>
+                <h:outputText value="#{AnexoMemorandoControlador.numMemorando}" style="color: #2779AA"/>
+                <h:outputLabel value="Anexar Documento:"/>
+                                <p:fileUpload  label="Selecionar Arquivo" 
+                                               allowTypes="/(\.|\/)(pdf)$/"
+                                               invalidFileMessage="Tipo de arquivo inválido"
+                                               invalidSizeMessage="Arquivo muito grande"
+                                               sizeLimit="2048000"
+                                               fileUploadListener="#{AnexoMemorandoControlador.handleFileUpload}" 
+                                               oncomplete="dlg_cad_anexo_memo.hide();" update=":growl_center" showButtons="false">
+                                </p:fileUpload>
+            </h:panelGrid>
+        </h:form>
+    </p:dialog>
+</html>
+

@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:dialog id="dlog_cad_memorando" header="Cadastro de Memorando" widgetVar="dlg_cad_memorando" 
+              closable="true" resizable="false" modal="true">
+        <h:form id="form_cad_memorando">
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Número:"/>
+                <p:inputMask mask="99999/9999" required="true" requiredMessage="O Campo [número] é Obrigatório!" 
+                             value="#{MemorandoControlador.memorando_inserir.numMemorando}"/>
+            </h:panelGrid>
+            <h:panelGrid columns="3">
+                <h:outputLabel value="Data Cadastro:"/>
+                <p:calendar value="#{MemorandoControlador.memorando_inserir.dataMemorando}" pattern="dd/MM/yyyy" locale="pt_BR" readonlyInput="true" pages="3"/>
+                <h:outputText value="*Caso o campo Data fique vazio, será inserida a data vigente." style="color: red; font-size: 9px"/>
+            </h:panelGrid>
+
+            <h:panelGrid columns="2" rendered="#{sessionScope.privilegio eq 'ADMINISTRADOR' or sessionScope.setor_id eq '29'}">
+                <h:outputLabel value="Setor Cadastrante:"/>
+                <p:selectOneMenu value="#{MemorandoControlador.setorCadastrante}" required="true" 
+                                 requiredMessage="O campo [Setor Cadastrante] é obrigatório">
+                    <f:selectItem itemLabel="SELECIONE SETOR ORIGEM" itemValue=""/>
+                    <f:selectItems value="#{UsuProControlador.usuariosSetor}" var="setor" itemLabel="#{setor}" itemValue="#{setor}"/>
+                </p:selectOneMenu>
+            </h:panelGrid>
+
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Assunto:"/>
+                <p:inputTextarea required="true" requiredMessage="Campo [Assunto] é Obrigatório!!" value="#{MemorandoControlador.memorando_inserir.assuntoMemorando}" 
+                                 style="width: 400px; text-transform: uppercase"/>
+                <h:outputLabel value="Descrição:"/>
+                <p:inputTextarea required="true" requiredMessage="Campo [Descrição] é Obrigatório!" value="#{MemorandoControlador.memorando_inserir.descricaoMemorando}" 
+                                 style="width: 400px; text-transform: uppercase"/>
+                <h:outputLabel value="Observações Gerais:"/>
+                <p:inputTextarea required="true" requiredMessage="Campo [Observações Gerais] é Obrigatório!" value="#{MemorandoControlador.memorando_inserir.observacaoMemorando}" 
+                                 style="width: 400px; text-transform: uppercase"/>
+            </h:panelGrid>
+            
+            <h:panelGrid columns="5">
+                <h:selectOneRadio value="#{MemorandoControlador.memorando_inserir.categoriaMemorando}" id="cad_memo_insert_categoria">
+                    <f:selectItem itemLabel="COMPRA" itemValue="COMPRA"/>
+                    <f:selectItem itemLabel="SERVIÇO" itemValue="SERVIÇO"/>
+                    <f:selectItem itemLabel="DIÁRIA" itemValue="DIÁRIA"/>
+                </h:selectOneRadio>
+                <h:outputText value="OUTRO: "/>
+                <p:selectBooleanCheckbox value="#{MemorandoControlador.cadOutro}">
+                    <p:ajax update="cad_memo_insert_outra_cat" listener="#{MemorandoControlador.cadZeraCategoria()}" immediate="true"/>
+                    <p:ajax update="cad_memo_insert_categoria" listener="#{MemorandoControlador.cadZeraCategoria()}"/>
+                </p:selectBooleanCheckbox>
+                <h:outputText value="OUTRO: "/>
+                <p:inputText value="#{MemorandoControlador.outroTipoMemorando}" style="text-transform: uppercase; width: 250px" id="cad_memo_insert_outra_cat">
+                </p:inputText>
+            </h:panelGrid>
+
+            <br/>
+            <center>
+                <h:panelGrid columns="2">
+                    <p:commandButton id="cad_memorando" value="Salvar" icon="ui-icon-plusthick"
+                                     type="submit" oncomplete="dlg_cad_memorando.hide();" actionListener="#{MemorandoControlador.inserir}" 
+                                     update=":growl_center :pnl_listMemorando"/>
+                    <p:commandButton value="Limpar" type="reset" icon="ui-icon-cancel"/>
+                </h:panelGrid>
+            </center>
+        </h:form>
+    </p:dialog>
+</html>
+

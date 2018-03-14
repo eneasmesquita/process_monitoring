@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:form id="form_confirm_del_anexo">
+        <p:confirmDialog message="Deseja realmente excluir o Anexo: #{AnexoControlador.anexo.nomeAnexo}"   
+                             header="Confirmação de exclusão de Anexo de Processo" 
+                             severity="alert" widgetVar="confirm_del_anexo_w" id="confirm_del_anexo" closable="false">  
+                <h:panelGroup layout="block" style="text-align: center;">
+                    <p:commandButton icon="ui-icon-check" value="Confirmar" onsuccess="confirm_del_anexo_w.hide();"  
+                                     actionListener="#{AnexoControlador.excluir}" 
+                                     update=":growl_center :form_descricao_processo:dtl_anexo"/>  
+                    <p:commandButton icon="ui-icon-cancel" value="Cancelar" oncomplete="confirm_del_anexo_w.hide();" />   
+                </h:panelGroup>
+            </p:confirmDialog> 
+    </h:form>
+</html>
+

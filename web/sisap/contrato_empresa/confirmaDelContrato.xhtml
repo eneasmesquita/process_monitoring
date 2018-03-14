@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+
+        <p:confirmDialog id="conf_del_contrato" widgetVar="conf_del_contrato_w" 
+                         header="Exclusão de Contrato" 
+                         height="50" width="350" closable="false"
+                         message="Você realmente deseja excluir o Contrato?" severity="alert">
+            <h:form id="form_del_contrato">
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="nº Contrato:"/>
+                    <h:outputText value="#{ContratoControlador.contrato.numContrato}" style="font-weight: bold; color: #2779AA"/>
+                </h:panelGrid>
+            <h:panelGroup layout="block" style="text-align: center;">
+                <p:commandButton value="Sim"  onsuccess="conf_del_contrato_w.hide();"  
+                                 actionListener="#{ContratoControlador.excluir}" 
+                                 update=":pnl_listTipoProcesso :pnl_listContrato_Empresa :growl_center"/>  
+                <p:commandButton value="Não" oncomplete="conf_del_contrato_w.hide();" /> 
+            </h:panelGroup>
+                </h:form>
+        </p:confirmDialog>
+</html>
+

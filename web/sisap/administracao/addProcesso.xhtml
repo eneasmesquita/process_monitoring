@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <p:dialog id="dlog_add_pro_usuario" header="Disponibilizar Processo" widgetVar="dlg_add_pro_usuario" 
+              width="700" closable="true" modal="true">
+        <h:form id="form_add_pro_usuario">
+
+            <h:panelGrid columns="2">
+
+                <h:outputLabel value="Usuário:"/>
+                <h:outputText value="#{UsuarioProcessoControlador.login} | #{UsuarioProcessoControlador.nomeUsuario}" style="color: blue"/>
+
+                <h:outputLabel value="Processo:"/>
+                <p:autoComplete required="true" requiredMessage="O campo [Processo] é obrigatório!" value="#{UsuarioProcessoControlador.numProcesso}"
+                                completeMethod="#{UsuarioProcessoControlador.completaNumProcesso}">
+                    <p:ajax event="blur" update="ot_tipo_processo ot_assunto_processo" listener="#{UsuarioProcessoControlador.retornaAtributosProcesso}"/>
+                </p:autoComplete>
+
+                <h:outputLabel value="Tipo Processo:"/>
+                <h:outputText id="ot_tipo_processo" value="#{UsuarioProcessoControlador.tipoProcesso}" style="color: blue;"/>
+
+                <h:outputLabel value="Assunto Processo:"/>
+                <h:outputText id="ot_assunto_processo" value="#{UsuarioProcessoControlador.assuntoProcesso}" style="color: blue;"/>
+
+                <br/>
+                <center>
+                    <h:panelGrid columns="2">
+                        <p:commandButton type="submit" value="Adicionar" actionListener="#{UsuarioProcessoControlador.inserir}" 
+                                         oncomplete="dlg_add_pro_usuario.hide();"
+                                         update=":growl_center :pnl_listProSigilosos"
+                                         icon="ui-icon-plusthick"/>
+                        <p:commandButton value="Limpar" actionListener="#{UsuarioProcessoControlador.preparaInsercao}" update="@form"
+                                         icon="ui-icon-cancel"/>
+                    </h:panelGrid>
+                </center>
+
+            </h:panelGrid>
+        </h:form>
+    </p:dialog>
+</html>
+

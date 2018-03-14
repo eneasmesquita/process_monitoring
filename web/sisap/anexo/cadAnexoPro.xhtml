@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <p:dialog id="dlog_cad_anexo_pro" header="Anexar Documento(s) a um Processo" widgetVar="dlg_cad_anexo_pro" 
+              width="700" closable="true" modal="true">
+        <h:form id="form_cad_anexo_pro">
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Processo Vinculado:"/>
+                <h:outputText value="#{AnexoControlador.numProcesso}" style="color: #2779AA"/>
+                <h:outputLabel value="Anexar Documento:"/>
+                <p:fileUpload showButtons="false" label="Selecionar Arquivo" mode="advanced" 
+                              sizeLimit="1000000" allowTypes="/(\.|\/)(pdf)$/" fileUploadListener="#{AnexoControlador.handleFileUpload}" 
+                              oncomplete="dlg_cad_anexo_pro.hide();" update=":growl_center">
+                </p:fileUpload>
+            </h:panelGrid>
+        </h:form>
+    </p:dialog>
+</html>
+

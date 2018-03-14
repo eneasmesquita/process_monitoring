@@ -1,0 +1,209 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:panel id="pnl_listAndamentoProcesso" rendered="#{controladorInterface.listAndamentoProcesso}">
+        <h:form id="form_list_andamento_processo">
+            <p:dataTable value="#{TramiteProcessoControlador.tramitacoes_processos}" var="tramitacao_processo" 
+                         paginator="true" rows="10"  
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink}
+                         {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                         rowsPerPageTemplate="10,15,20"
+                         emptyMessage="ESTE PROCESSO AINDA NÃO FOI POSTO EM TRÂMITE."
+                         id="dt_andamento_processo"
+                         rowIndexVar="index"
+                         paginatorAlwaysVisible="true"
+                         paginatorPosition="bottom" style="text-align: center"
+                         sortBy="#{tramitacao_processo.codTramitacaoProcesso}" sortOrder="ascending"
+                         rowStyleClass="#{empty index or index mod 2 ne 0 ? 'even-row' : 'odd-row'}">
+                <f:facet name="header">
+                    <h:panelGrid columns="2">
+                        <h:column>
+                            <p:commandButton title="Anexar Documento a um Processo"
+                                             id="cb_anexo_pro"
+                                             disabled="#{!TramiteProcessoControlador.tramite_processo.codProcesso.ativoProcesso}"
+                                             icon="ui-icon-folder-open"
+                                             rendered="#{TramiteProcessoControlador.exibeBotao}"
+                                             onclick="dlg_cad_anexo_pro.show();" actionListener="#{AnexoControlador.preparaInsercao}" 
+                                             update=":form_cad_anexo_pro :form_descricao_processo">
+                                <f:setPropertyActionListener value="#{TramiteProcessoControlador.numProcesso}" target="#{AnexoControlador.numProcesso}"/>
+                            </p:commandButton>
+                            <p:commandButton icon="ui-icon-note" id="cb_sol_pro"
+                                             disabled="#{!TramiteProcessoControlador.tramite_processo.codProcesso.ativoProcesso}"
+                                             rendered="#{TramiteProcessoControlador.exibeSolPro}"
+                                             onclick="dlog_form_solicitacao_processo.show();"
+                                             title="Solicitar Processo" actionListener="#{SolicitacaoProcessoControlador.preparaInsercao}" 
+                                             action="#{SolicitacaoProcessoControlador.pegaSetorAlvoSolicitacao()}"
+                                             update=":form_solicitacao_processo :form_solicitacao_processo:som_sol_pro">
+                                <f:setPropertyActionListener value="#{TramiteProcessoControlador.numProcesso}" target="#{SolicitacaoProcessoControlador.numProcesso}"/>
+                                <f:setPropertyActionListener value="#{TramiteProcessoControlador.codProcesso}" target="#{SolicitacaoProcessoControlador.codProcesso}"/>
+                            </p:commandButton>
+                        </h:column>
+                        <h:column>
+                            <h:panelGroup layout="block" style="text-align: left; margin-left: 35%">
+                                <h:outputText value="Andamento do Processo n°: "/>
+                                <h:outputText value="#{TramiteProcessoControlador.numProcesso}" rendered="#{not TramiteProcessoControlador.exibeBotao}"/>
+                                <p:commandLink oncomplete="dlg_descricao_processo.show();" style="color: #2779AA;"
+                                               rendered="#{TramiteProcessoControlador.exibeBotao}"
+                                               title="Visualizar Todas as Informações do Processo" value="#{TramiteProcessoControlador.numProcesso}" 
+                                               update=":dlog_descricao_processo :form_descricao_processo:dtl_anexo">
+                                    <f:setPropertyActionListener value="#{TramiteProcessoControlador.numProcesso}" target="#{AnexoControlador.numProcesso}"/>
+                                </p:commandLink>
+                            </h:panelGroup>
+                        </h:column>
+                    </h:panelGrid>
+                </f:facet>
+                <p:column style="width:16px">  
+                    <p:rowToggler rendered="#{tramitacao_processo.situacaoTp eq 'DESPACHADO' and tramitacao_processo.observacoesTp ne ''}"/>
+                    <p:rowToggler rendered="#{tramitacao_processo.situacaoTp eq 'RECEBIDO' and tramitacao_processo.observacoesTp != null}"/>
+                    <p:rowToggler rendered="#{tramitacao_processo.faseTp ne '-----' and tramitacao_processo.observacoesTp ne ''}"/>
+                </p:column> 
+                <p:column headerText="Tramitação">
+                    #{index+1}ª)
+                </p:column>
+                <p:column headerText="Remetente">
+                    #{tramitacao_processo.remetenteTp}
+                </p:column>
+                <p:column headerText="Setor Origem">
+                    #{tramitacao_processo.setorOrigemTp}
+                </p:column>
+                <p:column headerText="Data Envio">
+                    <h:outputText value="#{tramitacao_processo.dataEnvioTp}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Setor Destino">
+                    #{tramitacao_processo.setorDestinoTp}
+                </p:column>
+                <p:column headerText="Colaborador Recebimento">
+                    #{tramitacao_processo.colaboradorRecebeuTp}
+                    <h:outputText value="-----" style="color: gray" rendered="#{empty tramitacao_processo.colaboradorRecebeuTp}"/>
+                </p:column>
+                <p:column headerText="Data Recebimento">
+                    <h:outputText value="#{tramitacao_processo.dataRecebimentoTp}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                    <h:outputText value="-----" style="color: gray" rendered="#{empty tramitacao_processo.dataRecebimentoTp}"/>
+                </p:column>
+                <p:column headerText="Situação">
+                    <h:outputText value="#{tramitacao_processo.situacaoTp}" rendered="#{tramitacao_processo.faseTp eq '-----'}"/>
+                    <h:graphicImage name="despachado.png" library="images" rendered="#{tramitacao_processo.situacaoTp eq 'DESPACHADO' and tramitacao_processo.faseTp eq '-----'}"/>
+                    <h:graphicImage name="recebido.png" library="images" rendered="#{tramitacao_processo.situacaoTp eq 'RECEBIDO' and tramitacao_processo.faseTp eq '-----'}"/>
+                    <h:outputText value="NA CPL" rendered="#{tramitacao_processo.faseTp ne '-----'}" style="color: #2779AA"/>
+                </p:column>
+                <p:column headerText="Fase" rendered="#{TramiteProcessoControlador.exibeCertame eq ''}">
+                    <h:outputText value="MODALIDADE: " rendered="#{tramitacao_processo.faseTp ne '-----'}"/><br/>
+                    <h:outputText value="#{tramitacao_processo.faseTp}" style="color: #2779AA"/>
+                    <h:outputText value=";" rendered="#{tramitacao_processo.faseTp ne '-----'}"/>
+                    <br/>
+                    <h:outputText value="-----" style="color: gray" rendered="#{tramitacao_processo.faseTp eq ' '}"/>
+                    <h:outputText value="ABERTURA DE PROCESSO LICITATÓRIO" rendered="#{tramitacao_processo.faseTp ne '-----'}"/>
+                </p:column>
+                <p:column>
+                    <p:commandButton icon="ui-icon-arrowthickstop-1-w" title="Receber Processo"
+                                     style="background: top; border-style: hidden"
+                                     rendered="#{empty tramitacao_processo.dataRecebimentoTp and sessionScope.setor_id eq tramitacao_processo.setorDestinoTpId or 
+                                                 sessionScope.privilegio eq 'ADMINISTRADOR' and empty tramitacao_processo.dataRecebimentoTp and tramitacao_processo.faseTp eq '-----'}"
+                                     update=":form_confirm_recebimento_pro" actionListener="#{TramiteProcessoControlador.preparaInsercao}"
+                                     oncomplete="confirm_recebimento_pro_w.show();">
+                        <f:setPropertyActionListener value="#{tramitacao_processo.dataEnvioTp}" target="#{TramiteProcessoControlador.tramite_processo.dataEnvioTp}"/>
+                        <f:setPropertyActionListener value="#{tramitacao_processo.colaboradorRecebeuTp}" target="#{TramiteProcessoControlador.tramite_processo.colaboradorRecebeuTp}"/>
+                        <f:setPropertyActionListener value="#{tramitacao_processo.remetenteTp}" target="#{TramiteProcessoControlador.tramite_processo.remetenteTp}"/>
+                        <f:setPropertyActionListener value="#{tramitacao_processo.setorDestinoTp}" target="#{TramiteProcessoControlador.tramite_processo.setorDestinoTp}"/>
+                        <f:setPropertyActionListener value="#{tramitacao_processo.setorOrigemTp}" target="#{TramiteProcessoControlador.tramite_processo.setorOrigemTp}"/>
+                        <f:setPropertyActionListener value="#{tramitacao_processo.setorDestinoTpId}" target="#{TramiteProcessoControlador.tramite_processo.setorDestinoTpId}"/>
+                        <f:setPropertyActionListener value="#{tramitacao_processo.setorOrigemTpId}" target="#{TramiteProcessoControlador.tramite_processo.setorOrigemTpId}"/>
+                        <f:setPropertyActionListener value="#{tramitacao_processo.faseTp}" target="#{TramiteProcessoControlador.tramite_processo.faseTp}"/>
+                        <f:setPropertyActionListener value="#{tramitacao_processo.numProcesso.numProcesso}" target="#{TramiteProcessoControlador.numProcesso}"/>
+                        <!--<f:setPropertyActionListener value="#{tramitacao_processo}" target="#{TramiteProcessoControlador.tramite_processo}"/> -->
+                    </p:commandButton>
+                </p:column>
+                <p:rowExpansion>
+                    <p:panelGrid>
+                        <f:facet name="header">
+                            <p:row>
+                                <p:column style="width: 413px">
+                                    Observações
+                                </p:column>
+                            </p:row>
+                        </f:facet>
+                        <p:row>
+                            <p:column>
+                                <h:outputText value="##{tramitacao_processo.observacoesTp}" rendered="#{not empty tramitacao_processo.observacoesTp}"/>
+                                <h:outputLabel value="Nenhuma Observação." style="color: #f97e7e" rendered="#{empty tramitacao_processo.observacoesTp}"/>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                </p:rowExpansion>
+            </p:dataTable>
+            <br/>
+            <center>
+
+                <h:panelGrid columns="2">
+                    <p:commandButton icon="ui-icon-circle-arrow-w" actionListener="#{controladorInterface.exibelisProcessoCompra}" 
+                                     update=":pnl_center" title="Voltar" rendered="#{controladorInterface.classeProcesso eq 'compra'}"/>
+                    <p:commandButton icon="ui-icon-circle-arrow-w" actionListener="#{controladorInterface.exibelisProcessoDiaria}" 
+                                     update=":pnl_center" title="Voltar" rendered="#{controladorInterface.classeProcesso eq 'diaria'}"/>
+                    <p:commandButton icon="ui-icon-circle-arrow-w" actionListener="#{controladorInterface.exibelisProcessoServico}" 
+                                     update=":pnl_center" title="Voltar" rendered="#{controladorInterface.classeProcesso eq 'servico'}"/>
+                    <p:commandButton icon="ui-icon-circle-arrow-w" actionListener="#{controladorInterface.exibelisProcessoOutro}" 
+                                     update=":pnl_center" title="Voltar" rendered="#{controladorInterface.classeProcesso eq 'outro'}"/>
+                    <p:commandButton icon="ui-icon-circle-arrow-w" actionListener="#{controladorInterface.exibelistSolicitacaoProcesso}" 
+                                     update=":pnl_center" title="Voltar" rendered="#{controladorInterface.classeProcesso eq 'SP'}"/>
+
+                    <p:commandButton icon="ui-icon-refresh" title="Atualizar Andamento do Processo"
+                                     id="cb_update_apro1"
+                                     oncomplete="dlg_atualiza_andamento_processo.show();"
+                                     disabled="#{!TramiteProcessoControlador.tramite_processo.codProcesso.ativoProcesso}"
+                                     style="background: #c7fdc4"
+                                     rendered="#{TramiteProcessoControlador.exibeBotao and TramiteProcessoControlador.contador == 0 and TramiteProcessoControlador.exibeBotao2 and controladorInterface.classeProcesso ne 'SP'}" 
+                                     actionListener="#{TramiteProcessoControlador.preparaInsercao}"
+                                     update=":pnl_listAndamentoProcesso :form_atualiza_andamento_processo :form_atualiza_andamento_processo:pg_pl :form_atualiza_andamento_processo:sbcbox_pl 
+                                     :form_atualiza_andamento_processo:pg_normal :form_atualiza_andamento_processo:som_fase_cpl :form_atualiza_andamento_processo:it_obs">
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-refresh" title="Atualizar Andamento do Processo"
+                                     id="cb_update_apro2"
+                                     oncomplete="dlg_atualiza_andamento_processo.show();"
+                                     disabled="#{!TramiteProcessoControlador.tramite_processo.codProcesso.ativoProcesso}"
+                                     style="background: #c7fdc4"
+                                     rendered="#{TramiteProcessoControlador.exibeBotao and TramiteProcessoControlador.contador == 0 and TramiteProcessoControlador.exibeBotao2 and controladorInterface.classeProcesso eq 'SP'}" 
+                                     update=":pnl_listAndamentoProcesso :form_atualiza_andamento_processo :form_atualiza_andamento_processo:pg_pl :form_atualiza_andamento_processo:sbcbox_pl 
+                                     :form_atualiza_andamento_processo:pg_normal :form_atualiza_andamento_processo:som_fase_cpl :form_atualiza_andamento_processo:it_obs">
+                    </p:commandButton>
+
+                </h:panelGrid>
+
+                <!--
+                <strong style="color: #fb6b6b">
+                exibeBotao: #{TramiteProcessoControlador.exibeBotao}<br/>
+                exibeBotao2: #{TramiteProcessoControlador.exibeBotao2}<br/>
+                contador: #{TramiteProcessoControlador.contador}<br/>
+                exibeSolPro: #{TramiteProcessoControlador.exibeSolPro}<br/>
+                ativoProcesso: #{TramiteProcessoControlador.tramite_processo.codProcesso.ativoProcesso}
+                </strong>
+                
+                <strong style="color: #fb6b6b">
+                #{TramiteProcessoControlador.numProcesso} - codigo processo: #{TramiteProcessoControlador.codProcesso}
+            </strong>
+                -->
+
+            </center>
+            <p:commandButton icon="ui-icon-transferthick-e-w" value="Colocar em Trâmite"
+                             id="cb_start_tramite_pro"
+                             disabled="#{!TramiteProcessoControlador.tramite_processo.codProcesso.ativoProcesso}"
+                             style="background: #c7fdc4" 
+                             oncomplete="dlg_coloca_processo_tramite.show();"
+                             rendered="#{empty TramiteProcessoControlador.tramitacoes_processos and TramiteProcessoControlador.tramite_processo.codProcesso.ativoProcesso and controladorInterface.classeProcesso ne 'SP'}" 
+                             actionListener="#{TramiteProcessoControlador.preparaInsercao}"
+                             update=":form_coloca_processo_tramite">
+            </p:commandButton>
+
+            <br/>
+
+        </h:form>
+    </p:panel>
+</html>
+

@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:dialog id="dlog_cad_servidor" header="Cadastro de Servidores para Acompanhamento de Processos" widgetVar="dlg_cad_servidor" 
+              minWidth="600" closable="true" resizable="false" draggable="false" modal="true">
+        <h:form id="form_cad_servidor">
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Processo Sigiloso:"/>
+                <p:selectOneMenu value="#{UsuProControlador.codProcesso}" required="true" requiredMessage="O campo [Setor] é obrigatório.">
+                    <f:selectItem itemLabel="SELECIONE PROCESSO SIGILOSO" itemValue=""/>
+                    <f:selectItems value="#{ProcessoControlador.processosSigilosos}" var="sigiloso" 
+                                   itemLabel="#{sigiloso.numProcesso}, categoria: #{sigiloso.tipoProcesso}" itemValue="#{sigiloso.codProcesso}"/>
+                </p:selectOneMenu>
+                <h:outputLabel value="Nome:"/>
+                <p:selectOneMenu required="true" requiredMessage="O campo [Usuário] é obrigatório" value="#{UsuProControlador.usuario_processo.nomeCompleto}">
+                    <f:selectItem itemLabel="SELECIONE NOME" itemValue=""/>
+                    <f:selectItems value="#{UsuProControlador.usuarioNome}" var="usu" itemLabel="#{usu}" itemValue="#{usu}"/>
+                    <p:ajax listener="#{UsuProControlador.insereUsuarioLogin()}"/>
+                </p:selectOneMenu>
+            </h:panelGrid>
+            <br/>
+            <center>
+                <h:panelGrid columns="2">
+                    <p:commandButton id="cad_servidor" value="Salvar" icon="ui-icon-plusthick"
+                                     type="submit" oncomplete="dlg_cad_servidor.hide();" 
+                                     actionListener="#{UsuProControlador.inserir}"
+                                     update=":growl_center :form_list_pro_sigilosos:dt_tabela_pro_sigiloso :pnl_listTipoProcesso"/>
+                    <p:commandButton value="Limpar" icon="ui-icon-cancel" actionListener="#{UsuProControlador.preparaInsercao}" update="@form"/>
+                </h:panelGrid>
+            </center>
+            <p:messages/>
+        </h:form>
+    </p:dialog>
+</html>
+

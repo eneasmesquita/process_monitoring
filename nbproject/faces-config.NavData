@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scene Scope="Project" version="2">
+    <Scope Scope="Faces Configuration Only"/>
+    <Scope Scope="Project">
+        <Node id="sisap/memorando/atualizaAndamentoMemorando.xhtml" x="400" y="750" zoom="true"/>
+        <Node id="sisap/administracao/addProcesso.xhtml" x="900" y="750" zoom="true"/>
+        <Node id="sisap/processo/confirmaDefere.xhtml" x="1650" y="300" zoom="true"/>
+        <Node id="sisap/memorando/descricaoMemorando.xhtml" x="1400" y="300" zoom="true"/>
+        <Node id="sisap/memorando/cadMemorando.xhtml" x="400" y="300" zoom="true"/>
+        <Node id="sisap/tipoProcesso.xhtml" x="150" y="150" zoom="true"/>
+        <Node id="sisap/processo/cadProcesso.xhtml" x="650" y="300" zoom="true"/>
+        <Node id="sisap/anexo/confirmDelAnexoMemo.xhtml" x="400" y="1200" zoom="true"/>
+        <Node id="sisap/memorando/confirmTramiteMemo.xhtml" x="650" y="1050" zoom="true"/>
+        <Node id="sisap/anexo/confirmDelAnexo.xhtml" x="1900" y="300" zoom="true"/>
+        <Node id="sisap/contrato_empresa/altEmpresa.xhtml" x="2150" y="300" zoom="true"/>
+        <Node id="sisap/processo/AtualizaAndamentoProcesso.xhtml" x="150" y="450" zoom="true"/>
+        <Node id="usuarios/listUsu.xhtml" x="1400" y="600" zoom="true"/>
+        <Node id="sisap/contrato_empresa/altContrato.xhtml" x="150" y="1200" zoom="true"/>
+        <Node id="sisap/administracao/confirmaDelUsuarioPro.xhtml" x="1650" y="450" zoom="true"/>
+        <Node id="sisap/processo/confirmTramitePro.xhtml" x="2150" y="150" zoom="true"/>
+        <Node id="sisap/processo/confirmaDelProcesso.xhtml" x="1400" y="450" zoom="true"/>
+        <Node id="sisap/processo/altProcesso.xhtml" x="150" y="750" zoom="true"/>
+        <Node id="sisap/processo/listTipoProcesso.xhtml" x="900" y="150" zoom="true"/>
+        <Node id="sisap/processo/confirmaIndefere.xhtml" x="1150" y="750" zoom="true"/>
+        <Node id="sisap/processo/listAndamentoProcesso.xhtml" x="1150" y="150" zoom="true"/>
+        <Node id="sisap/contrato_empresa/confirmaDelContrato.xhtml" x="150" y="1350" zoom="true"/>
+        <Node id="sisap/anexo/confDownloadAnexoMemo.xhtml" x="150" y="300" zoom="true"/>
+        <Node id="index.xhtml" x="650" y="750" zoom="true"/>
+        <Node id="sisap/administracao/altServidor.xhtml" x="900" y="900" zoom="true"/>
+        <Node id="sisap/contrato_empresa/listContratoEmpresa.xhtml" x="650" y="600" zoom="true"/>
+        <Node id="sisap/memorando/listMemorando.xhtml" x="400" y="450" zoom="true"/>
+        <Node id="usuarios/confDelSu.xhtml" x="400" y="1050" zoom="true"/>
+        <Node id="sisap/contrato_empresa/cadContrato.xhtml" x="1400" y="150" zoom="true"/>
+        <Node id="sisap/anexo/cadAnexoPro.xhtml" x="400" y="600" zoom="true"/>
+        <Node id="sisap/administracao/cadProServidor.xhtml" x="1900" y="150" zoom="true"/>
+        <Node id="sisap/processo/descricaoProcesso.xhtml" x="650" y="450" zoom="true"/>
+        <Node id="sisap/processo/formSolicitacaoProcesso.xhtml" x="150" y="600" zoom="true"/>
+        <Node id="sisap/processo/ColocarProcessoTramite.xhtml" x="150" y="1050" zoom="true"/>
+        <Node id="sisap/memorando/altMemorando.xhtml" x="150" y="900" zoom="true"/>
+        <Node id="sisap/anexo/cadAnexoMemo.xhtml" x="650" y="150" zoom="true"/>
+        <Node id="sisap/memorando/confirmRecebMemo.xhtml" x="1150" y="600" zoom="true"/>
+        <Node id="sisap/processo/listSolicitacaoProcesso.xhtml" x="900" y="300" zoom="true"/>
+        <Node id="login.xhtml" x="1650" y="150" zoom="true"/>
+        <Node id="sisap/memorando/listAndamentoMemorando.xhtml" x="900" y="600" zoom="true"/>
+        <Node id="sisap/anexo/confDownloadAnexo.xhtml" x="1150" y="450" zoom="true"/>
+        <Node id="sisap/processo/confirmRecebPro.xhtml" x="400" y="150" zoom="true"/>
+        <Node id="sisap/administracao/listProSigilosos.xhtml" x="2400" y="150" zoom="true"/>
+        <Node id="sisap/contrato_empresa/confirmaDelEmpresa.xhtml" x="650" y="900" zoom="true"/>
+        <Node id="sisap/memorando/confirmaDelMemo.xhtml" x="1150" y="300" zoom="true"/>
+        <Node id="sisap/contrato_empresa/cadEmpresa.xhtml" x="900" y="450" zoom="true"/>
+        <Node id="sisap/administracao/confirmaDelUsuario.xhtml" x="400" y="900" zoom="true"/>
+    </Scope>
+    <Scope Scope="All Faces Configurations"/>
+</Scene>

@@ -1,0 +1,267 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    <!-- TELA PRINCIPAL DO SISTEMA, CONTENDO OS PAINÉIS ADMINISTRATIVOS  -->
+
+    <p:panel id="pnl_tipoProcesso" rendered="#{controladorInterface.tipoProcesso}">
+        
+        <h:outputLabel value="#{ProcessoControlador.utCompras}" style="display: none"/>
+        
+             <p:panel header="Geral" id="pnl_tipo_geral">
+            <h:form>
+                <p:panelGrid>
+                    <f:facet name="header">
+                        <p:row>
+                            <p:column style="color: #2779AA; width: 310px">
+                                Último em Trâmite
+                            </p:column>
+                            <p:column style="color: #2779AA; width: 310px">
+                                Último Cadastrado
+                            </p:column>
+                            <p:column style="color: #2779AA; width: 310px">
+                                Ativos
+                            </p:column>
+                            <p:column style="color: #2779AA; width: 310px">
+                                Arquivados
+                            </p:column>
+                        </p:row>
+                    </f:facet>
+                   <p:row>
+                        <p:column style="text-align: center">
+                            #{ProcessoControlador.utGeral}
+                            <h:outputText value="Não há Processos em Trâmite" style="color: gray" rendered="#{empty ProcessoControlador.utGeral}"/>
+                        </p:column>
+                        <p:column style="text-align: center">
+                            #{ProcessoControlador.ucGeral}
+                            <h:outputText value="Não há Processos Cadastrados" style="color: gray" rendered="#{empty ProcessoControlador.ucGeral}"/>
+                        </p:column>
+                        <p:column style="text-align: center">
+                            #{ProcessoControlador.qtdAtivoGeral}
+                        </p:column>
+                        <p:column style="text-align: center">
+                            #{ProcessoControlador.qtdArquivadoGeral}
+                        </p:column>
+                    </p:row>
+                    <f:facet name="footer">  
+                        <p:row>
+                            <p:column colspan="4" style="text-align: center">
+                                Total de Processos: 
+                                <h:outputText value="#{ProcessoControlador.totalProcessosGeral}" style="color: #2779AA; font-weight: normal">
+                                    <f:convertNumber pattern="00000"/>
+                                </h:outputText>
+                            </p:column>
+                        </p:row>
+                    </f:facet>  
+                </p:panelGrid>
+            </h:form>
+        </p:panel>
+
+        <p:panel header="Serviços" id="pnl_tipo_servicos">
+            <h:form>
+          <p:panelGrid>
+                    <f:facet name="header">
+                        <p:row>
+                            <p:column style="color: #2779AA; width: 310px">
+                                Último em Trâmite
+                            </p:column>
+                            <p:column style="color: #2779AA; width: 310px">
+                                Último Cadastrado
+                            </p:column>
+                            <p:column style="color: #2779AA; width: 310px">
+                                Ativos
+                            </p:column>
+                            <p:column style="color: #2779AA; width: 310px">
+                                Arquivados
+                            </p:column>
+                        </p:row>
+                    </f:facet>
+                    <p:row>
+                        <p:column style="text-align: center">
+                            #{ProcessoControlador.utServico}
+                            <h:outputText value="Não há Processos em Trâmite" style="color: gray" rendered="#{empty ProcessoControlador.utServico}"/>
+                        </p:column>
+                        <p:column style="text-align: center">
+                            #{ProcessoControlador.ucServico}
+                            <h:outputText value="Não há Processos Cadastrados" style="color: gray" rendered="#{empty ProcessoControlador.ucServico}"/>
+                        </p:column>
+                        <p:column style="text-align: center">
+                            #{ProcessoControlador.qtdAtivoServico}
+                        </p:column>
+                        <p:column style="text-align: center">
+                            #{ProcessoControlador.qtdArquivadoServico}
+                        </p:column>
+                    </p:row>
+                    <f:facet name="footer">  
+                        <p:row>
+                            <p:column colspan="4" style="text-align: center">
+                                Total de Processos: 
+                                <h:outputText value="#{ProcessoControlador.totalProcessosServico}" style="color: #2779AA; font-weight: normal">
+                                    <f:convertNumber pattern="00000"/>
+                                </h:outputText>
+                            </p:column>
+                        </p:row>
+                    </f:facet>  
+                </p:panelGrid>
+                <p:commandButton value="Listagem de Processos" icon="ui-icon-plusthick" 
+                                 actionListener="#{controladorInterface.exibelisProcessoServico}" update=":pnl_center"/>
+            </h:form>
+        </p:panel>
+
+        <p:panel header="Compras" id="pnl_tipo_compras">
+            <h:form>
+               <p:panelGrid>
+                    <f:facet name="header">
+                        <p:row>
+                            <p:column style="color: #2779AA; width: 310px">
+                                Último em Trâmite
+                            </p:column>
+                            <p:column style="color: #2779AA; width: 310px">
+                                Último Cadastrado
+                            </p:column>
+                            <p:column style="color: #2779AA; width: 310px">
+                                Ativos
+                            </p:column>
+                            <p:column style="color: #2779AA; width: 310px">
+                                Arquivados
+                            </p:column>
+                        </p:row>
+                    </f:facet>
+                    <p:row>
+                        <p:column style="text-align: center">
+                            #{ProcessoControlador.utCompras}
+                            <h:outputText value="Não há Processos em Trâmite" style="color: gray" rendered="#{empty ProcessoControlador.utCompras}"/>
+                        </p:column>
+                        <p:column style="text-align: center">
+                            #{ProcessoControlador.ucCompras}
+                            <h:outputText value="Não há Processos Cadastrados" style="color: gray" rendered="#{empty ProcessoControlador.ucCompras}"/>
+                        </p:column>
+                        <p:column style="text-align: center">
+                            #{ProcessoControlador.qtdAtivoCompras}
+                        </p:column>
+                        <p:column style="text-align: center">
+                            #{ProcessoControlador.qtdArquivadoCompras}
+                        </p:column>
+                    </p:row>
+                    <f:facet name="footer">  
+                        <p:row>
+                            <p:column colspan="4" style="text-align: center">
+                                Total de Processos:
+                                <h:outputText value="#{ProcessoControlador.totalProcessosCompras}" style="color: #2779AA; font-weight: normal">
+                                    <f:convertNumber pattern="00000"/>
+                                </h:outputText>
+                            </p:column>
+                        </p:row>
+                    </f:facet> 
+                </p:panelGrid>
+                <p:commandButton value="Listagem de Processos" icon="ui-icon-plusthick" actionListener="#{controladorInterface.exibelisProcessoCompra}" update=":pnl_center"/>
+            </h:form>
+        </p:panel>
+
+        <p:panel header="Diárias" id="pnl_tipo_diarias">
+            <h:form>
+               <p:panelGrid>
+                    <f:facet name="header">
+                        <p:row>
+                            <p:column style="color: #2779AA; width: 310px">
+                                Último em Trâmite
+                            </p:column>
+                            <p:column style="color: #2779AA; width: 310px">
+                                Último Cadastrado
+                            </p:column>
+                            <p:column style="color: #2779AA; width: 310px">
+                                Ativos
+                            </p:column>
+                            <p:column style="color: #2779AA; width: 310px">
+                                Arquivados
+                            </p:column>
+                        </p:row>
+                    </f:facet>
+                    <p:row>
+                        <p:column style="text-align: center">
+                            #{ProcessoControlador.utDiarias}
+                             <h:outputText value="Não há Processos em Trâmite" style="color: gray" rendered="#{empty ProcessoControlador.utDiarias}"/>
+                        </p:column>
+                        <p:column style="text-align: center">
+                            #{ProcessoControlador.ucDiarias}
+                            <h:outputText value="Não há Processos Cadastrados" style="color: gray" rendered="#{empty ProcessoControlador.ucDiarias}"/>
+                        </p:column>
+                        <p:column style="text-align: center">
+                            #{ProcessoControlador.qtdAtivoDiarias}
+                        </p:column>
+                        <p:column style="text-align: center">
+                            #{ProcessoControlador.qtdArquivadoDiarias}
+                        </p:column>
+                    </p:row>
+                    <f:facet name="footer">  
+                        <p:row>
+                            <p:column colspan="4" style="text-align: center">
+                                Total de Processos:
+                                <h:outputText value="#{ProcessoControlador.totalProcessosDiarias}" style="color: #2779AA; font-weight: normal">
+                                    <f:convertNumber pattern="00000"/>
+                                </h:outputText>
+                            </p:column>
+                        </p:row>
+                    </f:facet> 
+                </p:panelGrid>
+                <p:commandButton value="Listagem de Processos" icon="ui-icon-plusthick" actionListener="#{controladorInterface.exibelisProcessoDiaria}" update=":pnl_center"/>
+            </h:form>
+        </p:panel>
+
+        <p:panel header="Outros" id="pnl_tipo_outros">
+            <h:form>
+                <p:panelGrid>
+                    <f:facet name="header">
+                        <p:row>
+                            <p:column style="color: #2779AA; width: 310px">
+                                Último em Trâmite
+                            </p:column>
+                            <p:column style="color: #2779AA; width: 310px">
+                                Último Cadastrado
+                            </p:column>
+                            <p:column style="color: #2779AA; width: 310px">
+                                Ativos
+                            </p:column>
+                            <p:column style="color: #2779AA; width: 310px">
+                                Arquivados
+                            </p:column>
+                        </p:row>
+                    </f:facet>
+                    <p:row>
+                        <p:column style="text-align: center">
+                            #{ProcessoControlador.utOutros}
+                            <h:outputText value="Não há Processos em Trâmite" style="color: gray" rendered="#{empty ProcessoControlador.utOutros}"/>
+                        </p:column>
+                        <p:column style="text-align: center">
+                            #{ProcessoControlador.ucOutros}
+                            <h:outputText value="Não há Processos Cadastrados" style="color: gray" rendered="#{empty ProcessoControlador.ucOutros}"/>
+                        </p:column >
+                        <p:column style="text-align: center">
+                            #{ProcessoControlador.qtdAtivoOutros}
+                        </p:column>
+                        <p:column style="text-align: center">
+                            #{ProcessoControlador.qtdArquivadoOutros}
+                        </p:column>
+                    </p:row>
+                    <f:facet name="footer">  
+                        <p:row>
+                            <p:column colspan="4" style="text-align: center">
+                                Total de Processos:
+                                <h:outputText value="#{ProcessoControlador.totalProcessosOutros}" style="color: #2779AA; font-weight: normal">
+                                    <f:convertNumber pattern="00000"/>
+                                </h:outputText>
+                            </p:column>
+                        </p:row>
+                    </f:facet> 
+                </p:panelGrid>
+
+                <p:commandButton value="Listagem de Processos" icon="ui-icon-plusthick" actionListener="#{controladorInterface.exibelisProcessoOutro}" update=":pnl_center"/>
+            </h:form>
+        </p:panel>
+
+    </p:panel>
+</html>
+

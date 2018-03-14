@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:panel id="pnl_listAndamentoMemorando" rendered="#{controladorInterface.listAndamentoMemorando}">
+        <h:form id="form_list_andamento_memorando">
+            <p:dataTable value="#{TramiteMemorandoControlador.tramitacoes_memorandos}" var="tramitacao_memorando" 
+                         paginator="true" rows="10"  
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}
+                         {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                         rowsPerPageTemplate="10,15,20"
+                         emptyMessage="ESTE MEMORANDO AINDA NÃO FOI POSTO EM TRÂMITE."
+                         id="dt_andamento_memorando" 
+                         paginatorAlwaysVisible="true"
+                         rowIndexVar="index"
+                         paginatorPosition="bottom" style="text-align: center"
+                         rowStyleClass="#{empty index or index mod 2 ne 0 ? 'even-row' : 'odd-row'}">
+                <f:facet name="header">
+                    <h:panelGrid columns="2">
+                        <h:column>
+                            <p:commandButton title="Anexar Documento a um Memorando"
+                                             icon="ui-icon-folder-open"
+                                             rendered="#{TramiteMemorandoControlador.exibeBotao eq 'sim'}"
+                                             onclick="dlog_cad_anexo_memo.show();" actionListener="#{AnexoMemorandoControlador.preparaInsercao}" update=":form_cad_anexo_memo">
+                                <f:setPropertyActionListener value="#{TramiteMemorandoControlador.numMemorando}" target="#{AnexoMemorandoControlador.numMemorando}"/>
+                                <f:setPropertyActionListener value="#{TramiteMemorandoControlador.setorCadastrante}" target="#{AnexoMemorandoControlador.setorCadastrante}"/>
+                                <f:setPropertyActionListener value="#{TramiteMemorandoControlador.codMemorando}" target="#{AnexoMemorandoControlador.codMemorando}"/>
+                            </p:commandButton>
+                        </h:column>
+                        <h:column>
+                            <h:panelGroup layout="block" style="text-align: left; margin-left: 35%">
+                                Andamento do Memorando n°:
+                                <p:commandLink oncomplete="dlog_descricao_memorando.show();" style="color: #2779AA"
+                                               title="Visualizar Todas as Informações do Memorando" value="#{TramiteMemorandoControlador.numMemorando} - #{TramiteMemorandoControlador.setorCadastrante}" 
+                                               update=":dlog_descricao_memorando :form_descricao_memorando:dtl_anexo_memorando">
+                                    <f:setPropertyActionListener value="#{TramiteMemorandoControlador.numMemorando}" target="#{AnexoMemorandoControlador.numMemorando}"/>
+                                    <f:setPropertyActionListener value="#{TramiteMemorandoControlador.codMemorando}" target="#{AnexoMemorandoControlador.codMemorando}"/>
+                                </p:commandLink>
+                            </h:panelGroup>
+                        </h:column>
+                    </h:panelGrid>
+                    
+                </f:facet>
+                <p:column style="width:16px" >  
+                    <p:rowToggler rendered="#{tramitacao_memorando.situacaoTm eq 'DESPACHADO' and tramitacao_memorando.observacoesTm != null}"/>
+                    <p:rowToggler rendered="#{tramitacao_memorando.situacaoTm eq 'RECEBIDO' and tramitacao_memorando.observacoesTm != null}"/>
+                </p:column>
+                <p:column headerText="Tramitação">
+                    #{index+1}ª)
+                </p:column>
+                <p:column headerText="Remetente">
+                    #{tramitacao_memorando.remetenteTm}
+                </p:column>
+                <p:column headerText="Setor Origem">
+                    #{tramitacao_memorando.setorOrigemTm}
+                </p:column>
+                <p:column headerText="Data Envio">
+                    <h:outputText value="#{tramitacao_memorando.dataEnvioTm}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Setor Destino">
+                    #{tramitacao_memorando.setorDestinoTm}
+                </p:column>
+                <p:column headerText="Colaborador Recebimento">
+                    #{tramitacao_memorando.colaboradorRecebeuTm}
+                    <h:outputText value="-----" style="color: gray" rendered="#{empty tramitacao_memorando.colaboradorRecebeuTm}"/>
+                </p:column>
+                <p:column headerText="Data Recebimento">
+                    <h:outputText value="#{tramitacao_memorando.dataRecebimentoTm}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                    <h:outputText value="-----" style="color: gray" rendered="#{empty tramitacao_memorando.dataRecebimentoTm}"/>
+                </p:column>
+                <p:column headerText="Situação">
+                    #{tramitacao_memorando.situacaoTm}
+                    <h:graphicImage name="despachado.png" library="images" rendered="#{tramitacao_memorando.situacaoTm eq 'DESPACHADO'}"/>
+                    <h:graphicImage name="recebido.png" library="images" rendered="#{tramitacao_memorando.situacaoTm eq 'RECEBIDO'}"/>
+                </p:column>
+                <p:column>
+                    <p:commandButton icon="ui-icon-arrowthickstop-1-w" title="Receber Memorando"
+                                     style="background: top; border-style: hidden"
+                                     actionListener="#{TramiteMemorandoControlador.preparaInsercao}"
+                                     rendered="#{empty tramitacao_memorando.dataRecebimentoTm and sessionScope.setor_id eq tramitacao_memorando.setorDestinoTmId or sessionScope.privilegio eq 'ADMINISTRADOR' and empty tramitacao_memorando.dataRecebimentoTm}"
+                                     update=":form_confirm_recebimento_memo"
+                                     oncomplete="confirm_recebimento_memo_w.show();">
+                        <f:setPropertyActionListener value="#{tramitacao_memorando.dataEnvioTm}" target="#{TramiteMemorandoControlador.tramite_memorando.dataEnvioTm}"/>
+                        <f:setPropertyActionListener value="#{tramitacao_memorando.colaboradorRecebeuTm}" target="#{TramiteMemorandoControlador.tramite_memorando.colaboradorRecebeuTm}"/>
+                        <f:setPropertyActionListener value="#{tramitacao_memorando.codMemorando.numMemorando}" target="#{TramiteMemorandoControlador.numMemorando}"/>
+                        <f:setPropertyActionListener value="#{tramitacao_memorando.codMemorando.codMemorando}" target="#{TramiteMemorandoControlador.codMemorando}"/>
+                        <f:setPropertyActionListener value="#{tramitacao_memorando.remetenteTm}" target="#{TramiteMemorandoControlador.tramite_memorando.remetenteTm}"/>
+                        <f:setPropertyActionListener value="#{tramitacao_memorando.setorDestinoTm}" target="#{TramiteMemorandoControlador.tramite_memorando.setorDestinoTm}"/>
+                        <f:setPropertyActionListener value="#{tramitacao_memorando.setorOrigemTm}" target="#{TramiteMemorandoControlador.tramite_memorando.setorOrigemTm}"/>
+                        <f:setPropertyActionListener value="#{tramitacao_memorando.setorDestinoTmId}" target="#{TramiteMemorandoControlador.tramite_memorando.setorDestinoTmId}"/>
+                        <f:setPropertyActionListener value="#{tramitacao_memorando.setorOrigemTmId}" target="#{TramiteMemorandoControlador.tramite_memorando.setorOrigemTmId}"/>
+                    </p:commandButton>
+                </p:column>
+                <p:rowExpansion>
+                    <p:panelGrid >
+                        <f:facet name="header">
+                            <p:row>
+                                <p:column style="width: 413px">
+                                    Observações
+                                </p:column>
+                            </p:row>
+                        </f:facet>
+                        <p:row>
+                            <p:column>
+                                <h:outputText value="#{tramitacao_memorando.observacoesTm}" rendered="#{not empty tramitacao_memorando.observacoesTm}"/>
+                                <h:outputLabel value="Nenhuma Observação." style="color: #f97e7e" rendered="#{empty tramitacao_memorando.observacoesTm}"/>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                </p:rowExpansion>
+            </p:dataTable>
+            <br/>
+            <center>
+                
+                <h:panelGrid columns="2">
+                    <p:commandButton icon="ui-icon-circle-arrow-w" actionListener="#{controladorInterface.exibelistMemorando}" 
+                                     update=":pnl_center" title="Voltar"/>
+                    <p:commandButton id="btn_atualiza_tramite_memorando" icon="ui-icon-refresh" title="Atualizar Andamento do Memorando (Despacho)"
+                                     style="background: #c7fdc4"
+                                     oncomplete="dlog_atualiza_andamento_memorando.show();"
+                                     rendered="#{TramiteMemorandoControlador.exibeBotao eq 'sim' and TramiteMemorandoControlador.exibeBotao2 eq 'sim'}" 
+                                     update=":form_atualiza_andamento_memorando" actionListener="#{TramiteMemorandoControlador.preparaInsercao}">
+                    </p:commandButton>
+                </h:panelGrid>
+            </center>
+            <p:commandButton id="btn_tramite_memorando" icon="ui-icon-transferthick-e-w" value="Colocar em Trâmite" style="background: #c7fdc4"
+                             oncomplete="dlog_atualiza_andamento_memorando.show();"
+                             rendered="#{empty TramiteMemorandoControlador.tramitacoes_memorandos}" 
+                             actionListener="#{TramiteMemorandoControlador.preparaInsercao}"
+                             update=":form_atualiza_andamento_memorando">
+            </p:commandButton>
+        </h:form>
+    </p:panel>
+</html>
+

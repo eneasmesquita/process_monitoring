@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <p:dialog id="dlog_alt_empresa" header="Alteração de Empresa" widgetVar="dlg_alt_empresa" closable="false" resizable="false" modal="true">
+        <h:form id="form_alt_empresa">
+            <h:panelGrid columns="2">
+                <h:outputLabel value="CNPJ:"/>
+                <p:inputMask mask="99.999.999/9999-99"  required="true" requiredMessage="Campo [CNPJ] é Obrigatório!" style="width: 200px"
+                             value="#{EmpresaControlador.empresa.cnpj}"/>
+                <h:outputLabel value="Razão:"/>
+                <p:inputTextarea required="true" requiredMessage="Campo [Razão] é Obrigatório!" style="width: 400px; text-transform: uppercase"
+                                 value="#{EmpresaControlador.empresa.razao}"/>
+                <h:outputLabel value="Fantasia:"/>
+                <p:inputTextarea required="true" requiredMessage="Campo [Fantasia] é Obrigatório!" style="width: 400px; text-transform: uppercase"
+                                 value="#{EmpresaControlador.empresa.fantasia}"/>
+                <h:outputLabel value="Endereço:"/>
+                <p:inputTextarea required="true" requiredMessage="Campo [Endereço] é Obrigatório!" style="width: 400px; text-transform: uppercase"
+                                 value="#{EmpresaControlador.empresa.endereco}"/>
+                <h:outputLabel value="Responsável/Proprietário:"/>
+                <p:inputTextarea required="true" requiredMessage="Campo [Responsável/Proprietário] é Obrigatório!" style="width: 400px; text-transform: uppercase"
+                                 value="#{EmpresaControlador.empresa.responsavel}"/>
+                <h:outputLabel value="Contatos" style="font-weight: bold"/>
+                <h:outputText value=""/>
+                <h:outputLabel value="comercial:"/>
+                <p:inputMask mask="(99)9999-9999" required="true" requiredMessage="Campo [Contato-comercial] é Obrigatório!"
+                             value="#{EmpresaControlador.empresa.contato}"/>
+                <h:outputLabel value="Contrato:"/>
+                <p:autoComplete value="#{EmpresaControlador.numContrato}" completeMethod="#{EmpresaControlador.completaNumContrato}"/>
+            </h:panelGrid>
+            <br/>
+            <center>
+                <h:panelGrid columns="2">
+                    <p:commandButton id="btn_alt_empresa" value="Alterar" icon="ui-icon-pencil"
+                                     type="submit" oncomplete="dlg_alt_empresa.hide();" actionListener="#{EmpresaControlador.atualizar}" 
+                                     update=":growl_center :pnl_listContrato_Empresa"/>
+                    <p:commandButton value="Cancelar" icon="ui-icon-cancel" onsuccess="dlg_alt_empresa.hide();"/>
+                </h:panelGrid>
+            </center>
+        </h:form>
+    </p:dialog>
+</html>
+

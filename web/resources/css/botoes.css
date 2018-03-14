@@ -1,0 +1,15 @@
+.btn_anexo {
+    margin-bottom: 3px;
+}
+
+.btn_deferir {
+    background-image: url(images/check_24.png) !important;
+    height: 25px;
+    background-repeat: no-repeat !important;
+}
+
+.btn_indeferir {
+    background-image: url(images/close_24.png) !important;
+    height: 25px;
+    background-repeat: no-repeat !important;
+}

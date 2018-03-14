@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <p:dialog header="ANEXO PROCESSO" appendToBody="true" id="dlog_conf_download_anexo_pro"
+              widgetVar="dlg_conf_download_anexo_pro" resizable="false" 
+              modal="true" showEffect="fade" width="450">
+        <h:form prependId="false" id="form_conf_download_anexo_pro" target="_blank">
+            <h:panelGrid columns="1" style="margin-bottom: 10px">
+                <h:outputLabel value="Ação a ser realizada:" />
+            </h:panelGrid> 
+            <h:panelGroup layout="block" rendered="true" style="text-align: center;">
+                <p:commandButton id="btn_conf_download_anexo_pro" value="Download" onclick="dlg_conf_download_anexo_pro.hide();"
+                                 ajax="false" actionListener="#{AnexoControlador.downloadAnexoProcesso}">  
+                </p:commandButton>
+                <p:commandButton value="Cancelar" disabled="false" oncomplete="dlg_conf_download_anexo_pro.hide();" />
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+    
+</html>
+

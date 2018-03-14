@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Sisacompo" default="deploy-producao" basedir=".">
+    <description>Implantar o sistema Sisacompo no servidor de produção.</description>
+    <target depends="-config" name="deploy-producao" description="Deploy no servidor 000">
+        <property name="admin.host" value="000.00.00.000"/>
+        <echo message="inicio do deploy no servidor ${admin.host}"/>
+        <echo message="deploy: ${asinstall.dir}\bin\asadmin --host=${admin.host} --port=${admin.port} --user=${admin.user} --passwordfile=${password.file} --secure=true deploy --force=true --name=${appname} --contextroot=/${appname} dist\${war.filename}"/>
+        <exec failonerror="true" executable="cmd" description="Deploy to GlassFish">
+            <arg value="/c"/>
+            <arg value="${asinstall.dir}\bin\asadmin --host=${admin.host} --port=${admin.port} --user=${admin.user} --passwordfile=${password.file} --secure=true deploy --force=true --name=${appname} --contextroot=/${appname} dist\${war.filename}"/>
+        </exec>
+        <echo message="   *** deploy executado com sucesso"/>
+        <echo message="fim do deploy no servidor ${admin.host}"/>
+    </target>
+    <target depends="-config" name="deploy-desenv" description="Deploy no servidor 244">
+        <property name="admin.host" value="000.00.00.000"/>
+        <echo message="inicio do deploy no servidor ${admin.host}"/>
+        <echo message="deploy: ${asinstall.dir}\bin\asadmin --host=${admin.host} --port=${admin.port} --user=${admin.user} --passwordfile=${password.file} --secure=true deploy --force=true --name=${appname} --contextroot=/${appname} dist\${war.filename}"/>
+        <exec failonerror="true" executable="cmd" description="Deploy to GlassFish">
+            <arg value="/c"/>
+            <arg value="${asinstall.dir}\bin\asadmin --host=${admin.host} --port=${admin.port} --user=${admin.user} --passwordfile=${password.file} --secure=true deploy --force=true --name=${appname} --contextroot=/${appname} dist\${war.filename}"/>
+        </exec>
+        <echo message="   *** deploy executado com sucesso"/>
+        <echo message="fim do deploy no servidor ${admin.host}"/>
+    </target>
+    <target depends="-config" name="undeploy-producao" description="Undeploy no servidor 153">
+        <property name="admin.host" value="000.00.00.000"/>
+        <echo message="inicio do undeploy no servidor ${admin.host}"/>
+        <echo message="undeploy: ${asinstall.dir}\bin\asadmin --host=${admin.host} --port=${admin.port} --user=${admin.user} --passwordfile=${password.file} --secure=true undeploy ${appname}"/>
+        <exec failonerror="true" executable="cmd" description="Deploy to GlassFish">
+            <arg value="/c"/>
+            <arg value="${asinstall.dir}\bin\asadmin --host=${admin.host} --port=${admin.port} --user=${admin.user} --passwordfile=${password.file} --secure=true undeploy ${appname}"/>
+        </exec>
+        <echo message="   *** undeploy executado com sucesso"/>
+        <echo message="fim do undeploy no servidor ${admin.host}"/>
+    </target>
+    <target depends="-config" name="undeploy-desenv" description="Undeploy no servidor 244">
+        <property name="admin.host" value="000.00.00.000"/>
+        <echo message="inicio do undeploy no servidor ${admin.host}"/>
+        <echo message="undeploy: ${asinstall.dir}\bin\asadmin --host=${admin.host} --port=${admin.port} --user=${admin.user} --passwordfile=${password.file} --secure=true undeploy ${appname}"/>
+        <exec failonerror="true" executable="cmd" description="Deploy to GlassFish">
+            <arg value="/c"/>
+            <arg value="${asinstall.dir}\bin\asadmin --host=${admin.host} --port=${admin.port} --user=${admin.user} --passwordfile=${password.file} --secure=true undeploy ${appname}"/>
+        </exec>
+        <echo message="   *** undeploy executado com sucesso"/>
+        <echo message="fim do undeploy no servidor ${admin.host}"/>
+    </target>
+    <target name="-config" description="">
+        <property name="appname" value="Sisacompo"/>
+        <property name="asinstall.dir" location="C:\Desenv\glassfish-3.1.2.2\glassfish"/>
+        <property name="admin.port" value="4848"/>
+        <property name="admin.user" value="empresa"/>
+        <property name="password.file" location="${asinstall.dir}\bin\gfadmin-password.txt"/>
+        <property name="war.filename" value="${appname}.war"/>
+    </target>
+</project>
+

@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:panel id="pnl_listSolicitacaoProcesso" rendered="#{controladorInterface.listSolicitacaoProcesso}">
+        <h:form id="form_list_solicitacao_processo" prependId="false">
+            <p:dataTable value="#{SolicitacaoProcessoControlador.solicitacao_processos}" var="solicitacao_processo" 
+                         paginator="true" rows="10"  
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}
+                         {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                         rowsPerPageTemplate="10,15,20"
+                         emptyMessage="Nenhum registro encontrado."
+                         id="dt_tabela_solicitacao_processo" 
+                         paginatorAlwaysVisible="true"
+                         paginatorPosition="bottom" style="text-align: center"
+                         rowIndexVar="idx"
+                         rowStyleClass="#{empty idx or idx mod 2 ne 0 ? 'even-row' : 'odd-row'}">
+                <f:facet name="header">
+                    Solicitações de Processos
+                </f:facet>
+                <p:column style="width:16px">  
+                    <p:rowToggler />  
+                </p:column>
+                <p:column headerText="Cód." filterBy="#{solicitacao_processo.codSolicitacao}" filterMatchMode="contains">
+                    #{solicitacao_processo.codSolicitacao}
+                </p:column>
+                <p:column headerText="Processo" sortBy="#{solicitacao_processo.codProcesso.numProcesso}">
+                        
+                    <h:outputText value="#{solicitacao_processo.codProcesso.numProcesso}" rendered="#{sessionScope.setor_id ne solicitacao_processo.setorAlvoSolicitacaoId and sessionScope.privilegio ne 'ADMINISTRADOR' and sessionScope.privilegio ne 'USUARIO DPPA'}"/>
+                        
+                        <p:commandLink value="#{solicitacao_processo.codProcesso.numProcesso}"
+                                       rendered="#{sessionScope.setor_id eq solicitacao_processo.setorAlvoSolicitacaoId or sessionScope.privilegio eq 'ADMINISTRADOR' or sessionScope.privilegio eq 'USUÁRIO DPPA'}"
+                                       style="color: #2779AA"
+                                       onclick="dlg_descricao_processo.show();" 
+                                       title="Visualizar Todas as Informações do Processo" update=":form_descricao_processo :form_descricao_processo:dtl_anexo">
+                            <f:setPropertyActionListener value="#{solicitacao_processo.codProcesso}" target="#{ProcessoControlador.processo}"/>
+                            <f:setPropertyActionListener value="#{solicitacao_processo.codProcesso.numProcesso}" target="#{AnexoControlador.numProcesso}"/>
+                        </p:commandLink>
+                        
+                        <p:commandButton icon="ui-icon-search" style="background: top; border-style: hidden" 
+                                         title="Visualizar o Andamento do Processo"
+                                         actionListener="#{controladorInterface.exibelistAndamentoProcessoSP}" update=":pnl_center :form_atualiza_andamento_processo"
+                                         rendered="#{solicitacao_processo.status eq 'DEFERIDO' and sessionScope.setor_id eq solicitacao_processo.setorAlvoSolicitacaoId or sessionScope.privilegio eq 'ADMINISTRADOR' or sessionScope.privilegio eq 'USUÁRIO DPPA'}">
+                            <f:setPropertyActionListener value="#{solicitacao_processo.codProcesso.numProcesso}" target="#{TramiteProcessoControlador.numProcesso}"/>
+                            <f:setPropertyActionListener value="#{solicitacao_processo.codProcesso.ativoProcesso}" target="#{TramiteProcessoControlador.ativoProcesso}"/>
+                            <f:setPropertyActionListener value="#{solicitacao_processo.codProcesso}" target="#{ProcessoControlador.processo}"/>
+                            <f:setPropertyActionListener value="#{solicitacao_processo.setorSolicitante}" target="#{TramiteProcessoControlador.tramite_processo.setorDestinoTp}"/>
+                            <f:setPropertyActionListener value="#{solicitacao_processo.setorSolicitanteId}" target="#{TramiteProcessoControlador.setorDestinoId}"/>
+                        </p:commandButton>
+                                                        
+                </p:column>
+                <p:column headerText="Data Solicitação" sortBy="#{solicitacao_processo.dataSolicitacao}" filterBy="#{solicitacao_processo.dataSolicitacao}"
+                          filterMatchMode="contains">
+                    <h:outputText value="#{solicitacao_processo.dataSolicitacao}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Solicitante" sortBy="#{solicitacao_processo.solicitante}" filterBy="#{solicitacao_processo.solicitante}"
+                          filterMatchMode="startsWith">
+                    #{solicitacao_processo.solicitante}
+                </p:column>
+                <p:column headerText="Setor Solicitante" sortBy="#{solicitacao_processo.setorSolicitante}" filterBy="#{solicitacao_processo.setorSolicitante}"
+                          filterMatchMode="startsWith">
+                    #{solicitacao_processo.setorSolicitante}
+                </p:column>
+                <p:column headerText="Setor Alvo Solic.">
+                    #{solicitacao_processo.setorAlvoSolicitacao}
+                </p:column>
+                <p:column headerText="Status" sortBy="#{solicitacao_processo.status}" filterBy="#{solicitacao_processo.status}"
+                          filterMatchMode="startsWith">
+                    <h:outputText value="#{solicitacao_processo.status}" style="color: green" rendered="#{solicitacao_processo.status eq 'DEFERIDO'}"/>
+                    <h:outputText rendered="#{solicitacao_processo.status eq 'DEFERIDO'}" value=" | "/>
+                    <h:outputText value="#{solicitacao_processo.dataAtSolicitacao}" style="color: green" rendered="#{solicitacao_processo.status eq 'DEFERIDO'}"/>
+                    <h:outputText value="#{solicitacao_processo.status}" style="color: red" rendered="#{solicitacao_processo.status eq 'PENDENTE'}"/>
+                    <h:outputText value="#{solicitacao_processo.status}" style="color: gray" rendered="#{solicitacao_processo.status eq 'INDEFERIDO'}"/>
+                    <h:outputText rendered="#{solicitacao_processo.status eq 'INDEFERIDO'}" value=" | "/>
+                    <h:outputText value="#{solicitacao_processo.dataAtSolicitacao}" style="color: gray" rendered="#{solicitacao_processo.status eq 'INDEFERIDO'}"/>
+                </p:column>
+                <p:column headerText="Deferir">
+                    <p:commandButton 
+                        rendered="#{solicitacao_processo.status eq 'PENDENTE' and solicitacao_processo.setorAlvoSolicitacaoId eq sessionScope.setor_id or sessionScope.privilegio eq 'ADMINISTRADOR' and solicitacao_processo.status eq 'PENDENTE' or sessionScope.privilegio eq 'USUÁRIO DPPA' and solicitacao_processo.status eq 'PENDENTE'}"
+                        style="background: top; border-style: hidden"
+                                     oncomplete="confirm_defere_solicitacao_w.show();" update=":form_confirm_defere"
+                                     icon="ui-icon-check">
+                        <f:setPropertyActionListener value="#{solicitacao_processo}" target="#{SolicitacaoProcessoControlador.solicitacao_processo}"/>
+                        <f:setPropertyActionListener value="#{solicitacao_processo.codProcesso.numProcesso}" 
+                                                     target="#{SolicitacaoProcessoControlador.numProcesso}"/>
+                        <f:setPropertyActionListener value="#{solicitacao_processo.codProcesso.codProcesso}" 
+                                                     target="#{SolicitacaoProcessoControlador.codProcesso}"/>
+                    </p:commandButton>
+                    <p:button style="background: top; border-style: hidden" icon="ui-icon-minusthick" disabled="true"
+                              rendered="#{solicitacao_processo.status ne 'PENDENTE' and solicitacao_processo.setorAlvoSolicitacaoId ne sessionScope.setor_id or sessionScope.privilegio ne 'ADMINISTRADOR' and solicitacao_processo.status ne 'PENDENTE' or sessionScope.privilegio ne 'USUÁRIO DPPA' and solicitacao_processo.status ne 'PENDENTE'}"/>
+                </p:column>
+                <p:column headerText="Indeferir">
+                    <p:commandButton 
+                        rendered="#{solicitacao_processo.status eq 'PENDENTE' and solicitacao_processo.setorAlvoSolicitacaoId eq sessionScope.setor_id or sessionScope.privilegio eq 'ADMINISTRADOR' and solicitacao_processo.status eq 'PENDENTE' or sessionScope.privilegio eq 'USUÁRIO DPPA' and solicitacao_processo.status eq 'PENDENTE'}"
+                        oncomplete="confirm_indefere_solicitacao_w.show();" update=":form_confirm_indefere"
+                        style="background: top; border-style: hidden"
+                                     icon="ui-icon-closethick">
+                        <f:setPropertyActionListener value="#{solicitacao_processo}" target="#{SolicitacaoProcessoControlador.solicitacao_processo}"/>
+                        <f:setPropertyActionListener value="#{solicitacao_processo.codProcesso.numProcesso}" 
+                                                     target="#{SolicitacaoProcessoControlador.numProcesso}"/>
+                        <f:setPropertyActionListener value="#{solicitacao_processo.codProcesso.codProcesso}" 
+                                                     target="#{SolicitacaoProcessoControlador.codProcesso}"/>
+                    </p:commandButton>
+                    <p:button style="background: top; border-style: hidden" icon="ui-icon-minusthick" disabled="true"
+                              rendered="#{solicitacao_processo.status ne 'PENDENTE' and solicitacao_processo.setorAlvoSolicitacaoId ne sessionScope.setor_id or sessionScope.privilegio ne 'ADMINISTRADOR' and solicitacao_processo.status ne 'PENDENTE' or sessionScope.privilegio ne 'USUÁRIO DPPA' and solicitacao_processo.status ne 'PENDENTE'}"/>
+                </p:column>
+                <p:rowExpansion>
+                    <p:panelGrid>
+                        <f:facet name="header">
+                            <p:row>
+                                <p:column>
+                                    Motivo da Solicitação
+                                </p:column>
+                                <p:column rendered="#{solicitacao_processo.status eq 'INDEFERIDO'}">
+                                    Motivo do Indeferimento
+                                </p:column>
+                            </p:row>
+                        </f:facet>
+                        <p:row>
+                            <p:column>
+                                #{solicitacao_processo.motivoSolicitacao}
+                            </p:column>
+                            <p:column rendered="#{solicitacao_processo.status eq 'INDEFERIDO'}">
+                                #{solicitacao_processo.motivoIndeferimento}
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                </p:rowExpansion>
+            </p:dataTable>
+
+        </h:form>
+
+    </p:panel>
+</html>
+

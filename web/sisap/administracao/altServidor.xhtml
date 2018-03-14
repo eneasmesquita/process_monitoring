@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:dialog id="dlog_alt_servidor" header="Alteração de Servidores para Acompanhamento de Processos" widgetVar="dlg_alt_servidor" 
+              minWidth="600" closable="false" resizable="false" draggable="false" modal="true">
+        <h:form id="form_alt_servidor">
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Matrícula:"/>
+                <p:inputText maxlength="7" required="true" requiredMessage="Campo [matrícula] é Obrigatório!" value="#{UsuarioControlador.usuario_sisap.matricula}"/>
+                <h:outputLabel value="Login:"/>
+                <p:autoComplete value="#{UsuarioControlador.usuario_sisap.login}" completeMethod="#{UsuarioControlador.retornaUsuariosLogin}"
+                                required="true" requiredMessage="O campo [Login] é obrigatório."/>
+                <h:outputLabel value="Nome:"/>
+                <p:selectOneMenu value="#{UsuarioControlador.usuario_sisap.nome}" required="true" requiredMessage="O campo [Setor] é obrigatório.">
+                    <f:selectItem itemLabel="SELECIONE NOME" itemValue=""/>
+                    <f:selectItems value="#{UsuarioControlador.usuarioNome}" var="usuNome" itemLabel="#{usuNome}" itemValue="#{usuNome}"/>
+                </p:selectOneMenu>
+                <h:outputLabel value="Setor:"/>
+                <p:selectOneMenu value="#{UsuarioControlador.usuario_sisap.setorNome}" required="true" requiredMessage="O campo [Setor] é obrigatório.">
+                    <f:selectItem itemLabel="SELECIONE SETOR" itemValue=""/>
+                    <f:selectItems value="#{UsuarioControlador.usuariosSetor}" var="usu" itemLabel="#{usu}" itemValue="#{usu}"/>
+                </p:selectOneMenu>
+                <!--
+                <h:outputLabel value="Privilégio:"/>
+                <p:selectOneMenu style="width: 150px" value="#{UsuarioControlador.usuario_sisap.privilegio}">
+                    <f:selectItem itemLabel="VISUALIZAÇÃO" itemValue="VISUALIZACAO"/>
+                    <f:selectItem itemLabel="CADASTRO-EDIÇÃO" itemValue="CADASTRO-EDICAO"/>
+                    <f:selectItem itemLabel="USUÁRIO DPA" itemValue="USUARIO-DPA"/>
+                </p:selectOneMenu>
+                -->
+            </h:panelGrid>
+            <br/>
+            <center>
+            <h:panelGrid columns="2">
+                <p:commandButton id="alt_servidor" value="Salvar" icon="ui-icon-plusthick"
+                                 type="submit" oncomplete="dlg_alt_servidor.hide();" 
+                                 actionListener="#{UsuarioControlador.alterar}"
+                                 update=":growl_center :pnl_listProSigilosos"/>
+                <p:commandButton value="Cancelar" onsuccess="dlg_alt_servidor.hide();"/>
+            </h:panelGrid>
+            </center>
+            <p:messages/>
+        </h:form>
+    </p:dialog>
+</html>
+

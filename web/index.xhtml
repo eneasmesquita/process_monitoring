@@ -1,0 +1,246 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <f:view contentType="text/html">
+
+        <h:head>
+            <title>SISACOMPO</title>
+            <h:outputScript library="primefaces" name="jquery/jquery.js" target="head"/>
+            <h:outputScript name="primeFacesLocale-pt_BR.js"/>
+            <style type="text/css">
+                body {font-size: 12px;}
+                .quant-rec {
+                    background-color: #EE0000;
+                    border-radius: 18px 18px 18px 18px;
+                    color: #FFFFFF;
+                    font-size: 85%;
+                    font-weight: bold;
+                    padding: 1px 5px;
+                }
+                .quant-rec2 {
+                    background-color: #2779AA;
+                    border-radius: 18px 18px 18px 18px;
+                    color: #FFFFFF;
+                    font-size: 85%;
+                    font-weight: bold;
+                    padding: 1px 5px;
+                }
+
+                .ui-autocomplete-input {width: 300px !important; text-transform: uppercase !important;}
+
+                .ui-datatable .ui-datatable-data .even-row td{
+                    background-color: #eff3f7;
+                }
+
+                .ui-datatable .ui-datatable-data .odd-row td{
+                    background-color:white;
+                }
+            </style>
+            <link rel="shortcut icon" href="#{facesContext.externalContext.request.contextPath}/resources/images/favicon.ico" type="image/x-icon" /> 
+            <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+            <meta http-equiv="Pragma" content="no-cache"/>
+            <meta http-equiv="Expires" content="0"/>
+            <h:outputStylesheet library="css" name="botoes.css"/>
+
+        </h:head>
+
+        <h:body id="body">
+
+
+            <p:layout fullPage="true">
+
+
+                <p:layoutUnit position="north">
+                    <center>
+                        <h:panelGrid columns="3">
+                            <h:graphicImage name="logo.png" library="images" height="100" width="115"/> 
+                            <h:outputText value="__" style="color: #fff"/>
+                            <strong style="color:#002373; font-size: 19px; font-family:  'Trebuchet MS', Arial, Serif;"> Sistema de Acompanhamento de Processos Administrativos - SIAP</strong>
+                        </h:panelGrid>
+                    </center>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="west" >                                          
+
+                    <h:form id="form_index">                      
+
+                        <p:commandButton icon="ui-icon-home" style="width: 209px" actionListener="#{controladorInterface.exibetipoProcesso}" 
+                                         update=":pnl_center" title="Tela Principal"/>
+                        <p:menu style="width: 200px; height: 335px">
+                            <p:submenu label="Tramitação" icon="ui-icon-transferthick-e-w">
+                                <p:menuitem value="Contratos e Empresas" icon="ui-icon-folder-collapsed" actionListener="#{controladorInterface.exibelistContratoEmpresa}" update=":pnl_center"/>
+                                <p:menuitem value="Memorandos" icon="ui-icon-folder-collapsed" actionListener="#{controladorInterface.exibelistMemorando}" update=":pnl_center"/>
+
+                                <p:menuitem value="Processos Solicitados" icon="ui-icon-folder-collapsed" actionListener="#{controladorInterface.exibelistSolicitacaoProcesso}" update=":pnl_center"/>
+
+                                <p:submenu label="Cadastrar" icon="ui-icon-plusthick">
+                                    <p:menuitem value="Processo" oncomplete="dlg_cad_processo.show();" icon="ui-icon-note" actionListener="#{ProcessoControlador.preparaInsercao}" 
+                                                update=":form_cad_processo" rendered="#{sessionScope.setor_id eq '29' or sessionScope.privilegio eq 'ADMINISTRADOR'}"/>
+                                    <p:menuitem value="Memorando" oncomplete="dlg_cad_memorando.show();" icon="ui-icon-note" actionListener="#{MemorandoControlador.preparaInsercao}" 
+                                                update=":form_cad_memorando"/>
+                                    <p:menuitem value="Contrato" oncomplete="dlg_cad_contrato.show();" icon="ui-icon-note"  actionListener="#{ContratoControlador.preparaInsercao}" 
+                                                update=":form_cad_contrato" rendered="#{sessionScope.setor_id eq '13' or sessionScope.privilegio eq 'ADMINISTRADOR'}"/>
+                                    <p:menuitem value="Empresa" oncomplete="dlg_cad_empresa.show();" icon="ui-icon-suitcase" actionListener="#{EmpresaControlador.preparaInsercao}" 
+                                                update=":form_cad_empresa" rendered="#{sessionScope.setor_id eq '13' or sessionScope.privilegio eq 'ADMINISTRADOR'}"/>
+
+                                    <p:submenu label="Administração" icon="ui-icon-wrench" rendered="#{sessionScope.setor_id eq '29' or sessionScope.privilegio eq 'ADMINISTRADOR'}">
+                                        <p:menuitem value=" Adic. Visua. Pro. Sigiloso" icon="ui-icon-person" oncomplete="dlg_cad_servidor.show();"
+                                                    actionListener="#{UsuProControlador.preparaInsercao}" update=":form_cad_servidor"/>
+                                        <p:menuitem value="Processos Sigilosos" icon="ui-icon-bookmark" actionListener="#{controladorInterface.exibeListRelacaoProSigilosos}" update=":pnl_center"/>
+                                    </p:submenu>
+                                </p:submenu>
+                            </p:submenu>
+                        </p:menu>
+                        <br/>
+                        <p:commandButton value="Superusuários" icon="ui-icon-wrench" style="width: 209px; font-weight: bold; border-color: #2779AA" rendered="#{sessionScope.privilegio eq 'ADMINISTRADOR'}"
+                                         oncomplete="dlog_lst_usu_w.show();" actionListener="#{SuControlador.preparaInsercao}"/>
+
+                    </h:form>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center" >
+
+                    <p:toolbar>  
+                        <p:toolbarGroup align="left">
+
+                            <h:panelGrid columns="11">
+                                <h:outputText value="#{TramiteProcessoControlador.ocorrencia}" style="display: none" id="ocorrencia_tp"/>
+                                <h:outputText value="#{TramiteMemorandoControlador.ocorrencia}" style="display: none" id="ocorrencia_tm"/>
+                                <h:outputText value="#{SolicitacaoProcessoControlador.sp}" style="display: none" id="ocorrencia_sp"/>
+                                <p:commandButton id="memoBtn" value="MEMORANDOS A RECEBER:" style="font-family:  'Trebuchet MS', Arial, Serif; font-weight: bold; background: top; border-style: hidden"/>
+                                <h:outputLabel styleClass="#{TramiteMemorandoControlador.css}" value="#{TramiteMemorandoControlador.ocorrencia}" id="opl_tm"/>
+                                <h:outputLabel />
+                                <p:commandButton id="proBtn" value="PROCESSOS A RECEBER:" style="font-family:  'Trebuchet MS', Arial, Serif; ; font-weight: bold; background: top; border-style: hidden"/>
+                                <h:outputLabel styleClass="#{TramiteProcessoControlador.css}" value="#{TramiteProcessoControlador.ocorrencia}" id="opl_tp"/>
+                                <h:outputLabel />
+                                <p:commandButton id="solBtn" value="SOLICITAÇÕES PENDENTES DE PROCESSOS:" style="font-family:  'Trebuchet MS', Arial, Serif; ; font-weight: bold; background: top; border-style: hidden"/>
+                                <h:outputLabel styleClass="#{SolicitacaoProcessoControlador.css}" value="#{SolicitacaoProcessoControlador.ocorrencia}" id="opl_sp"/>
+                            </h:panelGrid>
+
+                            <p:overlayPanel id="testPanel" for="memoBtn" hideEffect="fade">  
+                                <p:dataTable id="dt_mp" value="#{TramiteMemorandoControlador.memorandos_pendentes}" var="mp" 
+                                             emptyMessage="Nenhum Memorando a Receber."
+                                             style="font-family:  'Trebuchet MS', Arial, Serif; font-weight: bold;">
+                                    <p:column>
+                                        #{mp.codMemorando.numMemorando} - #{mp.codMemorando.setorCadastrante}
+                                    </p:column>
+                                </p:dataTable> 
+                            </p:overlayPanel>
+
+                            <p:overlayPanel id="testPanel1" for="proBtn" hideEffect="fade">  
+                                <p:dataTable id="dt_pp" value="#{TramiteProcessoControlador.processos_pendentes}" var="pp" 
+                                             emptyMessage="Nenhum Processo a Receber."
+                                             style="font-family:  'Trebuchet MS', Arial, Serif; font-weight: bold;">
+                                    <p:column>
+                                        #{pp.codProcesso.numProcesso} - Categoria: #{pp.codProcesso.tipoProcesso}
+                                    </p:column>
+                                </p:dataTable>  
+                            </p:overlayPanel>
+
+                            <p:overlayPanel id="testPanel2" for="solBtn" hideEffect="fade">  
+                                <p:dataTable id="dt_sp" value="#{SolicitacaoProcessoControlador.solicitacoes_pendentes}" var="sp" 
+                                             emptyMessage="Nenhuma Solicitação Pendente."
+                                             style="font-family:  'Trebuchet MS', Arial, Serif; font-weight: bold;">
+                                    <p:column>
+                                        Código da Solicitação: #{sp.codSolicitacao}
+                                    </p:column>
+                                </p:dataTable>  
+                            </p:overlayPanel>
+
+                        </p:toolbarGroup>
+
+                        <p:toolbarGroup align="right">  
+                            <h:panelGrid columns="5">
+                                <h:outputLabel value="Usuário:" style="font-family:  'Trebuchet MS', Arial, Serif;"/>
+                                <h:outputText value="#{sessionScope.nome}" style="font-family:  'Trebuchet MS', Arial, Serif; color: #2779AA"/>
+                                <h:outputLabel value="Setor:" style="font-family:  'Trebuchet MS', Arial, Serif;"/>
+                                <h:outputText value="#{sessionScope.setor}" style="font-family:  'Trebuchet MS', Arial, Serif; color: #2779AA"/>
+                                <p:commandButton icon="ui-icon-power" title="Sair do SISACOMPO" action="#{loginBean.logout}" />
+                            </h:panelGrid>
+                        </p:toolbarGroup>  
+                    </p:toolbar>
+
+                    <p:growl id="growl_center" showDetail="true" life="8000"/>
+
+                    <p:panel id="pnl_center" style="width: 99%;height: 98%;" rendered="true">
+
+                        <ui:include id="inc_pnl_tipo_processo" src="/sisap/tipoProcesso.xhtml"/>
+                        <ui:include id="inc_pnl_list_tipo_processo" src="/sisap/processo/listTipoProcesso.xhtml"/>
+                        <ui:include id="inc_pnl_list_andamento_processo" src="/sisap/processo/listAndamentoProcesso.xhtml"/>
+                        <ui:include id="inc_pnl_list_memorando" src="/sisap/memorando/listMemorando.xhtml"/>
+                        <ui:include id="inc_pnl_list_solicitacao_processo" src="/sisap/processo/listSolicitacaoProcesso.xhtml"/>
+                        <ui:include id="inc_pnl_list_contrato_empresa" src="/sisap/contrato_empresa/listContratoEmpresa.xhtml"/>
+                        <ui:include id="inc_pnl_list_andamento_memorando" src="/sisap/memorando/listAndamentoMemorando.xhtml"/>
+                        <ui:include id="inc_pnl_list_relacao_usuarios" src="/sisap/administracao/listProSigilosos.xhtml"/>
+
+                    </p:panel>
+
+                </p:layoutUnit>
+
+                <p:layoutUnit position="south" style="text-align: center">
+
+                    <label style="color:#002373">Nome da Companhia</label><br/>
+                    <label style="color:#002373">Endereço da Companhia</label>
+
+                </p:layoutUnit>
+
+            </p:layout>
+
+            <ui:include id="inc_conf_defere" src="/sisap/processo/confirmaDefere.xhtml"/>
+            <ui:include id="inc_conf_del_anexo" src="/sisap/anexo/confirmDelAnexo.xhtml"/>
+            <ui:include id="inc_conf_del_anexo_memo" src="/sisap/anexo/confirmDelAnexoMemo.xhtml"/>
+            <ui:include id="inc_conf_recebimento_pro" src="/sisap/processo/confirmRecebPro.xhtml"/>
+            <ui:include id="inc_conf_recebimento_memo" src="/sisap/memorando/confirmRecebMemo.xhtml"/>
+            <ui:include id="inc_conf_indefere" src="/sisap/processo/confirmaIndefere.xhtml"/>
+
+
+            <ui:include id="inc_cad_processo" src="/sisap/processo/cadProcesso.xhtml"/>
+            <ui:include id="inc_cad_memorando" src="/sisap/memorando/cadMemorando.xhtml"/>
+            <ui:include id="inc_cad_contrato" src="/sisap/contrato_empresa/cadContrato.xhtml"/>
+            <ui:include id="inc_cad_empresa" src="/sisap/contrato_empresa/cadEmpresa.xhtml"/>
+            <ui:include id="inc_cad_servidor" src="/sisap/administracao/cadProServidor.xhtml"/>
+            <ui:include id="inc_dlog_list_usu" src="/usuarios/listUsu.xhtml"/>
+
+            <ui:include id="inc_alt_servidor" src="/sisap/administracao/altServidor.xhtml"/>
+
+            <ui:include id="inc_conf_del_servidor" src="/sisap/administracao/confirmaDelUsuario.xhtml"/>
+            <ui:include id="inc_conf_del_empresa" src="/sisap/contrato_empresa/confirmaDelEmpresa.xhtml"/>
+            <ui:include id="inc_conf_del_servidor_pro" src="/sisap/administracao/confirmaDelUsuarioPro.xhtml"/>
+            <ui:include id="inc_conf_tramite_pro" src="/sisap/processo/confirmTramitePro.xhtml"/>
+            <ui:include id="inc_conf_tramite_memo" src="/sisap/memorando/confirmTramiteMemo.xhtml"/>
+
+            <ui:include id="inc_alt_empresa" src="/sisap/contrato_empresa/altEmpresa.xhtml"/>
+            <ui:include id="inc_add_pro_usuario" src="/sisap/administracao/addProcesso.xhtml"/>
+            <ui:include id="inc_alt_contrato" src="/sisap/contrato_empresa/altContrato.xhtml"/>
+            <ui:include id="inc_dlog_descricao_processo" src="/sisap/processo/descricaoProcesso.xhtml"/>
+            <ui:include id="inc_dlog_alt_processo" src="/sisap/processo/altProcesso.xhtml"/>
+            <ui:include id="inc_dlog_atualiza_andamento_processo" src="/sisap/processo/AtualizaAndamentoProcesso.xhtml"/>
+            <ui:include id="inc_dlog_coloca_processo_tramite" src="/sisap/processo/ColocarProcessoTramite.xhtml"/>
+            <ui:include id="inc_dlog_form_solicitacao_processo" src="/sisap/processo/formSolicitacaoProcesso.xhtml"/>
+            <ui:include id="inc_dlog_descricao_memorando" src="/sisap/memorando/descricaoMemorando.xhtml"/>
+            <ui:include id="inc_dlog_atualiza_andamento_memorando" src="/sisap/memorando/atualizaAndamentoMemorando.xhtml"/>
+            <ui:include id="inc_dlog_cad_anexo_pro" src="/sisap/anexo/cadAnexoPro.xhtml"/>
+            <ui:include id="inc_dlog_cad_anexo_memo" src="/sisap/anexo/cadAnexoMemo.xhtml"/>
+
+            <ui:include id="inc_dlog_conf_download_anexo_pro" src="/sisap/anexo/confDownloadAnexo.xhtml"/>
+            <ui:include id="inc_dlog_conf_download_anexo_memo" src="/sisap/anexo/confDownloadAnexoMemo.xhtml"/>
+
+
+            <ui:include id="inc_dlog_conf_del_usu" src="/usuarios/confDelSu.xhtml"/>
+            <ui:include id="inc_conf_del_memorando" src="/sisap/memorando/confirmaDelMemo.xhtml"/>
+            <ui:include id="inc_conf_del_processo" src="/sisap/processo/confirmaDelProcesso.xhtml"/>
+
+            <ui:include id="inc_conf_del_contrato" src="/sisap/contrato_empresa/confirmaDelContrato.xhtml"/>
+
+        </h:body>
+
+    </f:view>
+
+</html>
+

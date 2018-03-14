@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:dialog id="dlog_descricao_processo" header="Descrição de Processo" widgetVar="dlg_descricao_processo"
+              closable="true" modal="true">
+        <h:form id="form_descricao_processo">
+            <h:panelGrid columns="2">
+                <h:outputText value="Número do Processo:"/>
+                <h:outputText style="color: #2779AA" value="#{ProcessoControlador.processo.numProcesso}"/>
+            </h:panelGrid>
+            <p:panelGrid>
+                <f:facet name="header">
+                    <p:row>
+                        <p:column style="width: 500px">
+                            Assunto
+                        </p:column>
+                        <p:column style="width: 238px">
+                            Categoria
+                        </p:column>
+                        <p:column>
+                            Ativo
+                        </p:column>
+                    </p:row>
+                </f:facet>
+                <p:row>
+                    <p:column>
+                        #{ProcessoControlador.processo.assuntoProcesso}
+                    </p:column>
+                    <p:column style="text-align: center">
+                        #{ProcessoControlador.processo.tipoProcesso}
+                    </p:column>
+                    <p:column>
+                        <h:graphicImage name="close.png" library="images" rendered="#{ProcessoControlador.processo.ativoProcesso eq false}"/>
+                        <h:graphicImage name="check.png" library="images" rendered="#{ProcessoControlador.processo.ativoProcesso eq true}"/>
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+            <p:panelGrid style="width: 850px">
+                <f:facet name="header">
+                    <p:row>
+                        <p:column>
+                            Descrição
+                        </p:column>
+                    </p:row>
+                </f:facet>
+                <p:row>
+                    <p:column>
+                        #{ProcessoControlador.processo.descricaoProcesso}
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+            <p:panelGrid style="width: 850px">
+                <f:facet name="header">
+                    <p:row>
+                        <p:column>
+                            Observações
+                        </p:column>
+                    </p:row>
+                </f:facet>
+                <p:row>
+                    <p:column>
+                        <h:outputText value="#{ProcessoControlador.processo.observacaoProcesso}"/>
+                        <h:outputText value="NÃO CONSTA" rendered="#{empty ProcessoControlador.processo.observacaoProcesso}"/>
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+
+            <p:panelGrid style="width: 850px">
+                <f:facet name="header">
+                    <p:row>
+                        <p:column>
+                            Documentos Anexados
+                        </p:column>
+                    </p:row>
+                </f:facet>
+                <p:row>
+                    <p:column>
+                        <p:dataTable value="#{AnexoControlador.anexosProcesso}" var="anexo" id="dtl_anexo" rows="5" paginator="true"
+                                     paginatorPosition="bottom" paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink} {RowsPerPageDropdown}"
+                                     paginatorAlwaysVisible="false" rowIndexVar="index" emptyMessage="Nenhum anexo encontrado.">
+                            <p:column>
+                                #{index+1} - 
+                                <p:commandLink value="#{anexo.nomeAnexo} - #{anexo.tamanho/1000}Kb" style="color: #2779AA"
+                                               oncomplete="dlg_conf_download_anexo_pro.show();" 
+                                               update=":dlog_conf_download_anexo_pro">                                           
+                                    <f:setPropertyActionListener value="#{anexo.codAnexo}" target="#{AnexoControlador.codAnexo}"/>
+                                </p:commandLink>
+                                <h:outputLabel value=""/>
+                                <h:graphicImage name="formato_pdf.png" library="images"/>
+                            </p:column>
+                            <p:column style="text-align: right; width: 16px">
+                                <p:commandButton icon="ui-icon-trash" style="background: top; border-style: hidden" oncomplete="confirm_del_anexo_w.show();" 
+                                                 update=":form_confirm_del_anexo">
+                                    <f:setPropertyActionListener value="#{anexo}" target="#{AnexoControlador.anexo}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>                  
+                    </p:column> 
+                </p:row>
+            </p:panelGrid>
+        </h:form>
+    </p:dialog>
+</html>
+

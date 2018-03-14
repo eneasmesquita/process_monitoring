@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <p:confirmDialog message="Confirme o recebimento do Memorando"   
+                     header="Confirmação de Recebimento de Memorando" 
+                     severity="alert" widgetVar="confirm_recebimento_memo_w" id="confirm_recebimento_memo" closable="false">
+        <h:form id="form_confirm_recebimento_memo">
+            
+             <h:outputLabel value="nº Memorando:"/>
+             <h:outputText value="#{TramiteMemorandoControlador.numMemorando}" style="font-weight: bold; color: #2779AA"/>
+             <br/>
+             <h:panelGrid columns="2" rendered="#{sessionScope.privilegio eq 'ADMINISTRADOR' or sessionScope.privilegio eq 'USUÁRIO DPPA'}">
+             <h:outputLabel value="Trâmite de Processo Legado: "/>
+             <p:selectBooleanCheckbox value="#{TramiteMemorandoControlador.tramiteLegado}">
+                 <p:ajax listener="#{TramiteMemorandoControlador.verificaTramiteLegadoRecebe()}" update="@form"/>
+            </p:selectBooleanCheckbox>
+             </h:panelGrid>
+             <h:panelGrid columns="2" rendered="#{TramiteMemorandoControlador.exibeTramiteLegadoRecebe}">
+                <h:outputLabel value="Colaborador Recebimento: "/>
+                <p:selectOneMenu required="true" requiredMessage="O campo [Usuário] é obrigatório" 
+                                 value="#{TramiteMemorandoControlador.tramite_memorando_inserir.colaboradorRecebeuTm}">
+                    <f:selectItem itemLabel="SELECIONE NOME" itemValue=""/>
+                    <f:selectItems value="#{UsuProControlador.usuarioNome}" var="usu" itemLabel="#{usu}" itemValue="#{usu}"/>
+                    <p:ajax listener="#{UsuProControlador.insereUsuarioLogin()}"/>
+                </p:selectOneMenu>
+                <h:outputLabel value="Data Recebimento: "/>
+                <p:calendar value="#{TramiteMemorandoControlador.tramite_memorando_inserir.dataRecebimentoTm}" pattern="dd/MM/yyyy" 
+                            locale="pt_BR" readonlyInput="true" pages="3" rendered="#{TramiteMemorandoControlador.exibeTramiteLegadoRecebe}"/>
+            </h:panelGrid>
+             
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Emitir Observação"/>
+                <p:inputTextarea value="#{TramiteMemorandoControlador.obsDespacho}" 
+                                 style="width: 300px; text-transform: uppercase"/>
+            </h:panelGrid>
+            <h:panelGroup layout="block" style="text-align: center;">
+                <p:commandButton icon="ui-icon-check" value="Confirmar" onsuccess="confirm_recebimento_memo_w.hide();"  
+                                 actionListener="#{TramiteMemorandoControlador.receberMemorando}"
+                                 update=":form_list_andamento_memorando :growl_center :ocorrencia_tm :opl_tm :testPanel"/>  
+                <p:commandButton icon="ui-icon-cancel" value="Cancelar" oncomplete="confirm_recebimento_memo_w.hide();" />   
+            </h:panelGroup>
+        </h:form>
+    </p:confirmDialog> 
+
+</html>
+

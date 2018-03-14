@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+
+        <p:confirmDialog id="conf_del_memorando" widgetVar="conf_del_memorando_w" 
+                         header="Exclusão de Memorando" 
+                         height="50" width="350" closable="false"
+                         message="Você realmente deseja excluir o Memorando?" severity="alert">
+            <h:form id="form_del_memorando">
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="n° Memorando:"/>
+                    <h:outputText value="#{MemorandoControlador.memorando.numMemorando}" style="font-weight: bold; color: #2779AA"/>
+                </h:panelGrid>
+            <h:panelGroup layout="block" style="text-align: center;">
+                <p:commandButton value="Sim"  onsuccess="conf_del_memorando_w.hide();"  
+                                 actionListener="#{MemorandoControlador.excluir}" update=":pnl_listMemorando"/>  
+                <p:commandButton value="Não" oncomplete="conf_del_memorando_w.hide();" /> 
+            </h:panelGroup>
+                </h:form>
+        </p:confirmDialog>
+    
+</html>
+

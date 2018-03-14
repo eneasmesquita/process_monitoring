@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:dialog header="Tramitar Processo" id="dlog_atualiza_andamento_processo" 
+              widgetVar="dlg_atualiza_andamento_processo" modal="true" closable="true">
+        <h:form id="form_atualiza_andamento_processo">
+
+            <h:panelGrid columns="2">
+                <h:outputText value="Número do Processo:"/>
+                <h:outputText style="color: #2779AA" value="#{TramiteProcessoControlador.numProcesso}"/>
+            </h:panelGrid>
+
+            <h:panelGrid columns="2" rendered="#{sessionScope.privilegio eq 'ADMINISTRADOR' or sessionScope.privilegio eq 'USUÁRIO DPPA'}">
+                <h:outputLabel value="Trâmite de Processo Legado: "/>
+                <p:selectBooleanCheckbox value="#{TramiteProcessoControlador.tramiteLegado}" disabled="#{TramiteProcessoControlador.exibeCheckBox}">
+                    <p:ajax listener="#{TramiteProcessoControlador.verificaTramiteLegado()}" update="@form"/>
+                </p:selectBooleanCheckbox>
+            </h:panelGrid>
+
+            <h:panelGrid rendered="#{!TramiteProcessoControlador.exibeTramiteLegado}">
+
+                <h:panelGrid columns="2" rendered="#{sessionScope.setor_id eq '13' and TramiteProcessoControlador.exibeCertame eq 'exibe' or sessionScope.privilegio eq 'ADMINISTRADOR' and TramiteProcessoControlador.exibeCertame eq 'exibe'}">
+                    <h:outputLabel value="Processo Licitatório:" />
+                    <p:selectBooleanCheckbox value="#{TramiteProcessoControlador.processoLicitatorio}" id="sbcbox_pl">
+                        <p:ajax listener="#{TramiteProcessoControlador.verificaProcessoLicitatorio()}" update="@form"/>
+                    </p:selectBooleanCheckbox>
+                </h:panelGrid>
+
+                <h:panelGrid columns="2" rendered="#{TramiteProcessoControlador.exibePL}" id="pg_pl">
+                    <h:outputLabel value="Modalidade:" rendered="#{sessionScope.setor_id eq '13' or sessionScope.privilegio eq 'ADMINISTRADOR'}"/>
+                    <p:selectOneMenu id="som_fase_cpl" value="#{TramiteProcessoControlador.faseCPL}" disabled="#{TramiteProcessoControlador.exibeBotaoPL}" 
+                                     rendered="#{sessionScope.setor_id eq '13' or sessionScope.privilegio eq 'ADMINISTRADOR'}">
+                        <f:selectItem itemLabel="SELECIONE MODALIDADE" itemValue="-----"/>
+                        <f:selectItem itemLabel="DISPENSA" itemValue="DISPENSA"/>
+                        <f:selectItem itemLabel="INEXIGIBILIDADE" itemValue="INEXIGIBILIDADE"/>
+                        <f:selectItem itemLabel="CONVITE" itemValue="CONVITE"/>
+                        <f:selectItem itemLabel="TOMADA DE PREÇOS" itemValue="TOMADA DE PREÇOS"/>
+                        <f:selectItem itemLabel="CONCORRÊNCIA" itemValue="CONCORRÊNCIA"/>
+                        <f:selectItem itemLabel="LEILÃO" itemValue="LEILÃO"/>
+                        <f:selectItem itemLabel="PREGÃO" itemValue="PREGÃO"/>
+                        <p:ajax listener="#{TramiteProcessoControlador.exibirBotoesTramitePro()}" update="@form btn_conf_tp btn_limpa_tp"/>
+                    </p:selectOneMenu>
+
+                    <h:outputLabel value="Observações:"/>
+                    <p:inputTextarea id="it_obs" style="text-transform: uppercase; width: 400px" 
+                                     value="#{TramiteProcessoControlador.tramite_processo_inserir.observacoesTp}" disabled="#{TramiteProcessoControlador.exibeBotaoPL}"/>
+                </h:panelGrid>
+
+                <h:panelGrid columns="2" rendered="#{not TramiteProcessoControlador.exibePL}" id="pg_normal">
+                    <h:outputLabel value="Setor Destino: "/>
+                    <p:selectOneMenu value="#{TramiteProcessoControlador.tramite_processo_inserir.setorDestinoTp}" required="true" 
+                                     requiredMessage="O campo [Setor Destino] é obrigatório" rendered="#{empty TramiteProcessoControlador.tramite_processo.setorDestinoTp}">
+                        <f:selectItem itemLabel="SELECIONE SETOR DESTINO" itemValue=""/>
+                        <f:selectItems value="#{UsuProControlador.usuariosSetor}" var="setor" itemLabel="#{setor}" itemValue="#{setor}"/>
+                        <p:ajax listener="#{TramiteProcessoControlador.insereSetorDestinoId()}"/>
+                        <p:ajax listener="#{TramiteProcessoControlador.exibirBotoesTramitePro()}" update="@form btn_conf_tp btn_limpa_tp"/>
+                    </p:selectOneMenu>
+                    <p:selectOneMenu value="#{TramiteProcessoControlador.tramite_processo_inserir.setorDestinoTp}" required="true" 
+                                     requiredMessage="O campo [Setor Destino] é obrigatório" rendered="#{not empty TramiteProcessoControlador.tramite_processo.setorDestinoTp}">
+                        <f:selectItem itemLabel="SELECIONE SETOR DESTINO" itemValue=""/>
+                        <f:selectItems value="#{UsuProControlador.usuariosSetor}" var="setor" itemLabel="#{setor}" itemValue="#{setor}"/>
+                        <p:ajax listener="#{TramiteProcessoControlador.insereSetorDestinoId()}"/>
+                        <p:ajax listener="#{TramiteProcessoControlador.exibirBotoesTramitePro()}" update="@form btn_conf_tp btn_limpa_tp"/>
+                    </p:selectOneMenu>
+
+                </h:panelGrid>
+
+            </h:panelGrid>
+
+            <h:panelGrid columns="2" rendered="#{TramiteProcessoControlador.exibeTramiteLegado}">
+
+                <h:outputLabel value="Colaborador Despacho: "/>
+                <p:selectOneMenu required="true" requiredMessage="O campo [Usuário] é obrigatório" 
+                                 value="#{TramiteProcessoControlador.tramite_processo_inserir.remetenteTp}">
+                    <f:selectItem itemLabel="SELECIONE NOME" itemValue=""/>
+                    <f:selectItems value="#{UsuProControlador.usuarioNome}" var="usu" itemLabel="#{usu}" itemValue="#{usu}"/>
+                    <p:ajax listener="#{UsuProControlador.insereUsuarioLogin()}"/>
+                </p:selectOneMenu>
+
+                <h:outputLabel value="Setor Origem: "/>
+                <p:selectOneMenu value="#{TramiteProcessoControlador.tramite_processo_inserir.setorOrigemTp}" required="true" 
+                                 requiredMessage="O campo [Setor Destino] é obrigatório">
+                    <f:selectItem itemLabel="SELECIONE SETOR ORIGEM" itemValue=""/>
+                    <f:selectItems value="#{UsuProControlador.usuariosSetor}" var="setor" itemLabel="#{setor}" itemValue="#{setor}"/>
+                    <p:ajax listener="#{TramiteProcessoControlador.insereSetorOrigemId()}"/>
+                </p:selectOneMenu>
+
+                <h:outputLabel value="Setor Destino: "/>
+                <p:selectOneMenu value="#{TramiteProcessoControlador.tramite_processo_inserir.setorDestinoTp}" required="true" 
+                                 requiredMessage="O campo [Setor Destino] é obrigatório">
+                    <f:selectItem itemLabel="SELECIONE SETOR DESTINO" itemValue=""/>
+                    <f:selectItems value="#{UsuProControlador.usuariosSetor}" var="setor" itemLabel="#{setor}" itemValue="#{setor}"/>
+                    <p:ajax listener="#{TramiteProcessoControlador.insereSetorDestinoId()}"/>
+                    <p:ajax listener="#{TramiteProcessoControlador.exibirBotoesTramitePro()}" update="@form"/>
+                </p:selectOneMenu>
+                <h:outputLabel value="Data Despacho: " rendered="#{TramiteProcessoControlador.exibeTramiteLegado}"/>
+                <p:calendar value="#{TramiteProcessoControlador.tramite_processo_inserir.dataEnvioTp}" pattern="dd/MM/yyyy" 
+                            locale="pt_BR" readonlyInput="true" pages="3" rendered="#{TramiteProcessoControlador.exibeTramiteLegado}"/>
+
+            </h:panelGrid> 
+
+            <h:panelGrid columns="2" rendered="#{!TramiteProcessoControlador.exibePL}">
+                <h:outputLabel value="Observações:"/>
+                <p:inputTextarea style="text-transform: uppercase; width: 400px" 
+                                 value="#{TramiteProcessoControlador.tramite_processo_inserir.observacoesTp}"/>
+            </h:panelGrid>
+
+            <br/>
+            <center>
+                <h:panelGrid columns="2" rendered="#{TramiteProcessoControlador.exibeBtn_tramite_pro}">
+
+                    <p:commandButton value="Tramitar" type="submit" icon="ui-icon-refresh" oncomplete="dlg_atualiza_andamento_processo.hide();"
+                                     rendered="#{TramiteProcessoControlador.exibeBtn_tramite_pro and TramiteProcessoControlador.exibePL}"
+                                     actionListener="#{TramiteProcessoControlador.tramitarProcesso}" 
+                                     update=":pnl_listAndamentoProcesso :form_list_andamento_processo:dt_andamento_processo :growl_center 
+                                     :ocorrencia_tp :opl_tp :testPanel1 :pnl_tipoProcesso"/>
+
+                    <p:commandButton value="Tramitar"  icon="ui-icon-refresh" onsuccess="confirm_tramite_pro_w.show();"
+                                     id="btn_conf_tp" rendered="#{TramiteProcessoControlador.exibeBtn_tramite_pro and !TramiteProcessoControlador.exibePL}" 
+                                     update=":form_confirm_tramite_pro"/>
+                    <p:commandButton value="Limpar" id="btn_limpa_tp" rendered="#{TramiteProcessoControlador.exibeBtn_tramite_pro}"
+                                     actionListener="#{TramiteProcessoControlador.preparaInsercao}" update="@form"/>
+                </h:panelGrid>
+            </center>
+        </h:form>
+    </p:dialog>
+
+</html>
+

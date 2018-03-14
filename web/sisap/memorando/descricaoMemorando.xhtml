@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:dialog id="dlog_descricao_memorando" header="Descrição de Memorando" widgetVar="dlg_descricao_memorando"
+              closable="true" modal="true">
+        <h:form id="form_descricao_memorando" prependId="false">
+            <h:panelGrid columns="2">
+                <h:outputText value="Número do Memorando:"/>
+                <h:outputText style="color: #2779AA" value="#{MemorandoControlador.memorando.numMemorando}"/>
+            </h:panelGrid>
+            <p:panelGrid>
+                <f:facet name="header">
+                    <p:row>
+                        <p:column>
+                            Data Abertura
+                        </p:column>
+                        <p:column style="width: 434px">
+                            Setor Cadastrante
+                        </p:column>
+                        <p:column style="width: 250px">
+                            Categoria
+                        </p:column>
+                    </p:row>
+                </f:facet>
+                <p:row>
+                    <p:column style="text-align: center">
+                        <h:outputText value="#{MemorandoControlador.memorando.dataMemorando}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="text-align: center">
+                        #{MemorandoControlador.memorando.setorCadastrante}
+                    </p:column>
+                    <p:column style="text-align: center">
+                        #{MemorandoControlador.memorando.categoriaMemorando}
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+            <p:panelGrid style="width: 850px">
+                <f:facet name="header">
+                    <p:row>
+                        <p:column>
+                            Assunto
+                        </p:column>
+                    </p:row>
+                </f:facet>
+                <p:row>
+                    <p:column>
+                        #{MemorandoControlador.memorando.assuntoMemorando}
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+            <p:panelGrid style="width: 850px">
+                <f:facet name="header">
+                    <p:row>
+                        <p:column>
+                            Descrição
+                        </p:column>
+                    </p:row>
+                </f:facet>
+                <p:row>
+                    <p:column>
+                        #{MemorandoControlador.memorando.descricaoMemorando}
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+
+            <p:panelGrid style="width: 850px">
+                <f:facet name="header">
+                    <p:row>
+                        <p:column>
+                            Observações
+                        </p:column>
+                    </p:row>
+                </f:facet>
+                <p:row>
+                    <p:column>
+                        <h:outputText value="#{MemorandoControlador.memorando.observacaoMemorando}"/>
+                        <h:outputText value="NÃO CONSTA" rendered="#{empty MemorandoControlador.memorando.observacaoMemorando}"/>
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+            <p:panelGrid style="width: 850px">
+                <f:facet name="header">
+                    <p:row>
+                        <p:column>
+                            Documentos Anexados
+                        </p:column>
+                    </p:row>
+                </f:facet>
+                <p:row>
+                    <p:column>
+                        <p:dataTable value="#{AnexoMemorandoControlador.documentosAnexosMemorando}" var="anexoMemorando" id="dtl_anexo_memorando" rows="5" paginator="true"
+                                     paginatorPosition="bottom" paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink} {RowsPerPageDropdown}"
+                                     paginatorAlwaysVisible="false" rowIndexVar="index" emptyMessage="Nenhum anexo encontrado.">
+                            <p:column>
+                                #{index+1} - 
+                                <p:commandLink value="#{anexoMemorando.nomeArquivoMemo} - #{anexoMemorando.tamanho/1000}Kb" style="color: #2779AA; vertical-align: central"
+                                               oncomplete="dlg_conf_download_anexo_memo.show();" 
+                                               update=":dlog_conf_download_anexo_memo">
+                                    <f:setPropertyActionListener value="#{anexoMemorando.codAnexoMemo}" target="#{AnexoMemorandoControlador.codAnexoMemo}"/>
+                                </p:commandLink>
+                                <h:outputLabel value=""/>
+                                <h:graphicImage name="formato_pdf.png" library="images"/>
+                            </p:column>
+                            <p:column style="text-align: right; width: 16px">
+                                <p:commandButton icon="ui-icon-trash" style="background: top; border-style: hidden" oncomplete="confirm_del_anexo_memo_w.show();" 
+                                                 update=":form_confirm_del_anexo_memo">
+                                    <f:setPropertyActionListener value="#{anexoMemorando}" target="#{AnexoMemorandoControlador.anexoMemorando}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>                  
+                    </p:column> 
+                </p:row>
+            </p:panelGrid>
+        </h:form>
+    </p:dialog>
+</html>
+

@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:panel id="pnl_listProSigilosos" rendered="#{controladorInterface.listRelacaoProSigilosos}">
+
+        <h:form id="form_list_pro_sigilosos">
+            <p:dataTable value="#{ProcessoControlador.processosSigilosos}" var="processo" 
+                         paginator="true" rows="10"  
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}
+                         {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                         rowsPerPageTemplate="10,15,20"
+                         emptyMessage="Nenhum Processo encontrado."
+                         id="dt_tabela_pro_sigiloso" 
+                         paginatorAlwaysVisible="true"
+                         paginatorPosition="bottom" style="text-align: center"
+                         rowIndexVar="index"
+                         rowStyleClass="#{empty index or index mod 2 ne 0 ? 'even-row' : 'odd-row'}">
+                <f:facet name="header">
+                    Listagem de Processos Sigilosos
+                </f:facet>
+                <p:column style="width: 16px">
+                    <p:rowToggler/>
+                </p:column>
+                <p:column>
+                    #{idx+1}
+                </p:column>
+                <p:column headerText="Processo" filterBy="#{processo.numProcesso}" filterMatchMode="contains">
+                    #{processo.numProcesso}
+                </p:column>
+                <p:column headerText="Categoria" filterBy="#{processo.tipoProcesso}" filterMatchMode="contains">
+                    #{processo.tipoProcesso}
+                </p:column>
+
+                <p:rowExpansion>
+                    
+                    <p:panelGrid rendered="#{empty processo.usuarioProcessoCollection}">
+                        <f:facet name="header">
+                            <p:row>
+                                <p:column style="width: 413px">
+                                   Usuários com permissão de visualização
+                                </p:column>
+                            </p:row>
+                        </f:facet>
+                        <p:row>
+                            <p:column>
+                                <h:outputLabel value="Nenhum Registro Encontrado." style="color: #f97e7e"/>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    
+                    <p:dataTable rendered="#{not empty processo.usuarioProcessoCollection}"
+                        value="#{processo.usuarioProcessoCollection}" var="upu" rows="5" paginator="false"
+                                 paginatorPosition="bottom" paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink} {RowsPerPageDropdown}"
+                                 paginatorAlwaysVisible="false" rowIndexVar="index" emptyMessage="Nenhum Usuário encontrado.">
+                        <f:facet name="header">
+                            Usuários com permissão de visualização
+                        </f:facet>
+                        <p:column>
+                            #{index+1} 
+                        </p:column>
+                        <p:column headerText="Login">
+                            #{upu.username} 
+                        </p:column>
+                        <p:column headerText="Nome">
+                            #{upu.nomeCompleto} 
+                        </p:column>
+                        <p:column headerText="Setor">
+                            #{upu.setorNome} 
+                        </p:column>
+                        <p:column headerText="Excluir">
+                            <p:commandButton icon="ui-icon-trash" oncomplete="conf_del_pro_usuario_w.show();" 
+                                             update=":form_del_pro_usuario"
+                                             style="background: top; border-style: hidden">
+                                <f:setPropertyActionListener value="#{upu}" target="#{UsuProControlador.usuario_processo}"/>
+                                <f:setPropertyActionListener value="#{upu.codProcesso.numProcesso}" target="#{UsuProControlador.numProcesso}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>   
+
+                </p:rowExpansion>
+
+            </p:dataTable>
+
+        </h:form>
+
+    </p:panel>
+</html>
+

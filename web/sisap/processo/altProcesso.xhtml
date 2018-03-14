@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:dialog header="Alteração de Processo" id="dlog_atualiza_processo" 
+              widgetVar="dlg_atualiza_processo" modal="true" closable="false" >
+        <h:form id="form_atualiza_processo">
+
+            <h:panelGrid columns="2">
+                <h:outputText value="Número do Processo:"/>
+                <p:inputMask mask="99999/9999" value="#{ProcessoControlador.processo.numProcesso}" required="true" 
+                             requiredMessage="O campo [Num Processo] é obrigatório!" readonly="true"/>
+                <h:outputLabel value="Assunto:"/>
+                <p:inputTextarea required="true" requiredMessage="Campo [Assunto] é Obrigatório!!" value="#{ProcessoControlador.processo.assuntoProcesso}" 
+                                 style="width: 400px; text-transform: uppercase"/>
+                <h:outputText value="Categoria: "/>
+
+                <h:panelGrid columns="5">
+                    <h:outputLabel value="Categoria: " />
+                    <p:selectOneMenu value="#{ProcessoControlador.processo.tipoProcesso}" id="categoriaPro">
+                        <f:selectItem itemLabel="SELECIONE CATEGORIA" itemValue=""/>
+                        <f:selectItem itemLabel="COMPRA" itemValue="COMPRA"/>
+                        <f:selectItem itemLabel="SERVIÇO" itemValue="SERVIÇO"/>
+                        <f:selectItem itemLabel="DIÁRIA" itemValue="DIÁRIA"/>
+                    </p:selectOneMenu>
+                    <h:outputText value="OUTRO: "/>
+                    <p:selectBooleanCheckbox value="#{ProcessoControlador.outro}">
+                        <p:ajax update="categoriaPro outroTipoPro" listener="#{ProcessoControlador.zeraCategoria()}"/>
+                        <p:ajax update="outroTipoPro" listener="#{ProcessoControlador.zeraCategoria()}" immediate="true"/>
+                    </p:selectBooleanCheckbox>
+                    <p:inputText id="outroTipoPro" value="#{ProcessoControlador.outroTipoProcessoEdit}" style="text-transform: uppercase; width: 250px"/>
+                </h:panelGrid>
+
+                <h:outputLabel value="Descrição:"/>
+                <p:inputTextarea required="true" requiredMessage="Campo [Descrição] é Obrigatório!" value="#{ProcessoControlador.processo.descricaoProcesso}" 
+                                 style="width: 400px; text-transform: uppercase"/>
+                <h:outputLabel value="Observações Gerais:"/>
+                <p:inputTextarea value="#{ProcessoControlador.processo.observacaoProcesso}" style="width: 400px; text-transform: uppercase"/>
+                <h:outputLabel value="Ativo:"/>
+                <p:selectOneRadio value="#{ProcessoControlador.processo.ativoProcesso}">
+                    <f:selectItem itemLabel="SIM" itemValue="true"/>
+                    <f:selectItem itemLabel="NÃO" itemValue="false"/>
+                </p:selectOneRadio>
+                <h:outputLabel value="Memorando Vinculado:"/>
+                <p:autoComplete maxlength="8" required="true" requiredMessage="O campo [Memorando Vinculado] é obrigatório" 
+                                value="#{ProcessoControlador.numMemorando}" completeMethod="#{ProcessoControlador.completaNumMemorando}"/>
+                <h:outputLabel value="Sigiloso:"/>
+                <p:selectBooleanCheckbox value="#{ProcessoControlador.processo.sigiloso}" required="true" requiredMessage="O campo [Sigiloso] é obrigatório"/>
+            </h:panelGrid>
+            <br/>
+            <center>
+                <h:panelGrid columns="2">
+                    <p:commandButton id="atualiza_processo" value="Salvar" icon="ui-icon-plusthick"
+                                     type="submit" oncomplete="dlg_atualiza_processo.hide();" actionListener="#{ProcessoControlador.atualizar}" 
+                                     update=":pnl_listTipoProcesso :growl_center
+                                     :form_list_andamento_processo
+                                     :pnl_tipo_geral :pnl_tipo_servicos :pnl_tipo_compras 
+                                     :pnl_tipo_diarias :pnl_tipo_outros :pnl_tipoProcesso :pnl_listProSigilosos"/>
+                    <p:commandButton value="Cancelar" icon="ui-icon-cancel"  onsuccess="dlg_atualiza_processo.hide();"/>
+                </h:panelGrid>
+            </center>
+        </h:form>
+    </p:dialog>
+</html>
+
