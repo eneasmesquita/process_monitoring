@@ -13,7 +13,6 @@ This repository contains the source code of a company’s administrative process
 **Technologies**
 
 * Java
-* JSF - Primefaces
-* NetBeans
+* Primefaces
 * Glassfish
 * PostgreSQL
