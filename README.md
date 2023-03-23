@@ -1,6 +1,6 @@
-# System for processing administrative proceedings
+# Application for processing administrative proceedings
 
-This repository contains the source code of a company’s administrative process monitoring system. The goal of the system is to automate the monitoring of ongoing processes, providing updated information to managers.
+This repository contains the source code of a company’s administrative process monitoring application. The goal of the application is to automate the monitoring of ongoing processes, providing updated information to managers.
 
 
 **Features**
