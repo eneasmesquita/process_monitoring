@@ -5,15 +5,15 @@ This repository contains the source code of a company’s administrative process
 
 **Features**
 
-Users: CRUD, privileges, and access control
-Processes: CRUD, View Control, procedure, file sharing
-Departaments: CRUD
-Companies: CRUD, CRUD contracts
+* Users: CRUD, privileges, and access control
+* Processes: CRUD, View Control, procedure, file sharing
+* Departaments: CRUD
+* Companies: CRUD, CRUD contracts
 
 **Technologies**
 
-Java
-JSF - Primefaces
-NetBeans
-Glassfish
-PostgreSQL
+* Java
+* JSF - Primefaces
+* NetBeans
+* Glassfish
+* PostgreSQL
